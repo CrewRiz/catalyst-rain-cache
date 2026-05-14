@@ -38,16 +38,16 @@ DEFAULT_RULER_LENGTHS = (4096, 8192)
 DEFAULT_LONGBENCH_TEMPLATE = """Please read the following text and answer the question below.
 
 <text>
-{context}
+$DOC$
 </text>
 
-{question}
+$Q$
 
 Choices:
-(A) {choice_A}
-(B) {choice_B}
-(C) {choice_C}
-(D) {choice_D}
+(A) $C_A$
+(B) $C_B$
+(C) $C_C$
+(D) $C_D$
 
 Format your response as follows: "The correct answer is (insert answer here)"."""
 
