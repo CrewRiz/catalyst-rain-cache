@@ -1,0 +1,243 @@
+{
+  "charts": {
+    "baseline_comparison": "charts/baseline_comparison.svg",
+    "fixed_state_memory": "charts/fixed_state_memory.svg",
+    "quality_perplexity": "charts/quality_perplexity.svg",
+    "retrieval_quality": "charts/retrieval_quality.svg"
+  },
+  "claim_boundaries": {
+    "compact_archive_is_optional_not_hot_decode_state": true,
+    "decode_path_scans_compact_archive": false,
+    "fixed_state_claim": true,
+    "quality_numbers_are_from_existing_public_wheel_benchmarks": true,
+    "tinyllama_effective_context_not_raw_rope_extension": true
+  },
+  "fixed_state_scaling": [
+    {
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 134234112,
+      "catalyst_state_bytes": 16384,
+      "standard_kv_bytes": 16777216000,
+      "tokens": 128000
+    },
+    {
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 134234112,
+      "catalyst_state_bytes": 16384,
+      "standard_kv_bytes": 67108864000,
+      "tokens": 512000
+    },
+    {
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 134234112,
+      "catalyst_state_bytes": 16384,
+      "standard_kv_bytes": 131072000000,
+      "tokens": 1000000
+    },
+    {
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 134234112,
+      "catalyst_state_bytes": 16384,
+      "standard_kv_bytes": 262144000000,
+      "tokens": 2000000
+    }
+  ],
+  "hkvc_query_scaling": {
+    "all_exact_values_ok": true,
+    "largest_entries": 5000,
+    "median_latency_span_us": 0.292,
+    "rows": [
+      {
+        "confidence": 0.011678,
+        "dimension": 1024,
+        "entries": 100,
+        "max_us": 22.625,
+        "mean_us": 12.3021,
+        "median_us": 11.958,
+        "min_us": 11.833,
+        "p95_us": 12.208,
+        "store_per_second": 24205.75,
+        "store_seconds": 0.004131,
+        "value_ok": true
+      },
+      {
+        "confidence": 0.000219,
+        "dimension": 1024,
+        "entries": 1000,
+        "max_us": 18.667,
+        "mean_us": 12.323,
+        "median_us": 12.25,
+        "min_us": 12.125,
+        "p95_us": 12.334,
+        "store_per_second": 24104.71,
+        "store_seconds": 0.041486,
+        "value_ok": true
+      },
+      {
+        "confidence": 7.8e-05,
+        "dimension": 1024,
+        "entries": 5000,
+        "max_us": 24.0,
+        "mean_us": 12.4989,
+        "median_us": 12.1875,
+        "min_us": 12.084,
+        "p95_us": 12.458,
+        "store_per_second": 24064.63,
+        "store_seconds": 0.207774,
+        "value_ok": true
+      }
+    ]
+  },
+  "memory_profiles": {
+    "full_mha": {
+      "active_window_kv_bytes": 536870912,
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 536887296,
+      "bounded_hot_cache_gb": 0.536887296,
+      "bounded_hot_cache_reduction_vs_standard_x": 976.5326985870793,
+      "catalyst_state_bytes": 16384,
+      "head_dim": 128,
+      "kv_heads": 32,
+      "label": "MHA KV stress profile",
+      "layers": 32,
+      "precision_bytes": 2,
+      "standard_kv_bytes_1m": 524288000000,
+      "standard_kv_gb_1m": 524.288,
+      "state_only_reduction_vs_standard_x": 32000000.0
+    },
+    "llama8b_gqa": {
+      "active_window_kv_bytes": 134217728,
+      "active_window_tokens": 1024,
+      "bounded_hot_cache_bytes": 134234112,
+      "bounded_hot_cache_gb": 0.134234112,
+      "bounded_hot_cache_reduction_vs_standard_x": 976.4433052605883,
+      "catalyst_state_bytes": 16384,
+      "head_dim": 128,
+      "kv_heads": 8,
+      "label": "8B GQA KV profile",
+      "layers": 32,
+      "precision_bytes": 2,
+      "standard_kv_bytes_1m": 131072000000,
+      "standard_kv_gb_1m": 131.072,
+      "state_only_reduction_vs_standard_x": 8000000.0
+    }
+  },
+  "million_token_secret_retrieval": {
+    "all_retrieved": true,
+    "available": true,
+    "baseline_fp16_kv_bytes": 655360000000,
+    "baseline_fp16_kv_gb": 655.36,
+    "catalyst_state_bytes": 16384,
+    "claim_boundary": "Adversarial public-wheel HKVC/Rain retrieval test: random 256-bit needles at logical token 10 are queried at logical token 1,000,000. This measures Catalyst associative state retrieval and explicit KV memory pressure; real causal-LM quality must be measured separately with a model/runtime that supports the target context length.",
+    "correct": 32,
+    "logical_gap_tokens": 999990,
+    "mean_confidence": 0.031069,
+    "median_per_secret_us": 95.7012,
+    "median_query_all_us": 3062.4375,
+    "min_confidence": 0.02585,
+    "misses": 0,
+    "mode": "quick",
+    "needle_token_position": 10,
+    "p95_per_secret_us": 98.2539,
+    "p95_query_all_us": 3144.125,
+    "query_token_position": 1000000,
+    "rain_header_bytes": 2576,
+    "random_secret_unique_count": 32,
+    "retrieval_accuracy_pct": 100.0,
+    "secret_bits": 256,
+    "state_reduction_vs_fp16_x": 40000000.0,
+    "suite": "million_token_secret_retrieval",
+    "trials": 32
+  },
+  "modern_baselines": {
+    "included": [
+      "FP16 KV cache",
+      "TurboQuant 3.5-bit",
+      "KIVI 2-bit",
+      "PyramidKV 12%",
+      "Catalyst Brain HKVC"
+    ],
+    "rows": [
+      {
+        "assumption": "tokens * layers * hidden * 2 K/V tensors * 2 FP16 bytes",
+        "family": "baseline",
+        "memory_mb": 83886.08,
+        "method": "FP16 KV cache",
+        "reduction_vs_fp16_x": 1.0,
+        "relative_to_fp16_pct": 100.0,
+        "shape": "linear",
+        "source": "standard transformer KV-cache model",
+        "tokens": 128000
+      },
+      {
+        "assumption": "3.5 bits per channel quality-neutral KV-cache point",
+        "family": "quantization",
+        "memory_mb": 18350.08,
+        "method": "TurboQuant 3.5-bit",
+        "reduction_vs_fp16_x": 4.5714,
+        "relative_to_fp16_pct": 21.875,
+        "shape": "linear compressed",
+        "source": "arXiv:2504.19874",
+        "tokens": 128000
+      },
+      {
+        "assumption": "KV-only 2-bit quantization model versus FP16 KV cache",
+        "family": "quantization",
+        "memory_mb": 10485.76,
+        "method": "KIVI 2-bit",
+        "reduction_vs_fp16_x": 8.0,
+        "relative_to_fp16_pct": 12.5,
+        "shape": "linear compressed",
+        "source": "arXiv:2402.02750",
+        "tokens": 128000
+      },
+      {
+        "assumption": "12% retained KV cache setting reported against full KV cache",
+        "family": "retention",
+        "memory_mb": 10066.3296,
+        "method": "PyramidKV 12%",
+        "reduction_vs_fp16_x": 8.3333,
+        "relative_to_fp16_pct": 12.0,
+        "shape": "linear retained",
+        "source": "arXiv:2406.02069",
+        "tokens": 128000
+      },
+      {
+        "assumption": "4096-dim public SDK world-vector state, not SDK source internals",
+        "family": "holographic fixed state",
+        "memory_mb": 0.016384,
+        "method": "Catalyst Brain HKVC",
+        "reduction_vs_fp16_x": 5120000.0,
+        "relative_to_fp16_pct": 1.953e-05,
+        "shape": "fixed state",
+        "source": "public catalyst-brain SDK",
+        "tokens": 128000
+      }
+    ],
+    "scope": "memory-model comparison; quality is reported separately where measured",
+    "tokens": 128000
+  },
+  "source_results": "/Users/ghostmesh/catalyst-brain-benchmarks/results",
+  "tinyllama_effective_2m": {
+    "active_prompt_tokens": 125,
+    "adapter": "CatalystTinyLlamaLongContextAdapter",
+    "all_retrieved": true,
+    "available": true,
+    "baseline_fp16_kv_gb": 1310.72,
+    "catalyst_state_bytes": 16384,
+    "claim_boundary": "This modifies TinyLlama at the integration layer: Catalyst Brain carries far-context state up to logical token 2,000,000 and materializes recalled facts into the active prompt. It is not a claim that TinyLlama's raw RoPE attention window was retrained to 2M tokens.",
+    "exact_retrieval_accuracy_pct": 100.0,
+    "generated_contains_secret": false,
+    "max_logical_context_tokens": 2000000,
+    "model": "TinyLlama-1.1B-Chat-v1.0",
+    "needle_token_position": 10,
+    "ppl_improvement_x": 25.5813,
+    "query_token_position": 2000000,
+    "rain_header_bytes": 2584,
+    "secret_bits": 256,
+    "state_reduction_vs_fp16_x": 80000000.0,
+    "target_ppl_with_recall": 1.086565,
+    "target_ppl_without_recall": 27.795727,
+    "trials": 8
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "baseline_import_readiness": {
+    "aggregate": {
+      "importable_count": 0,
+      "measured_same_hardware_count": 0,
+      "tracked_baseline_count": 5
+    },
+    "rows": [
+      {
+        "comparison_role": "quantized_kv_cache",
+        "import_name": "kivi",
+        "measured_same_hardware": false,
+        "method": "KIVI",
+        "next_step": "Import an implementation or pinned fork and run the same tensor/model workload.",
+        "package_found": false,
+        "readiness_status": "package_not_installed"
+      },
+      {
+        "comparison_role": "quantized_kv_cache",
+        "import_name": "turboquant",
+        "measured_same_hardware": false,
+        "method": "TurboQuant",
+        "next_step": "Import implementation artifacts or reproduce from paper code if released.",
+        "package_found": false,
+        "readiness_status": "package_not_installed"
+      },
+      {
+        "comparison_role": "eviction_or_retention",
+        "import_name": "pyramidkv",
+        "measured_same_hardware": false,
+        "method": "PyramidKV/H2O retention",
+        "next_step": "Run retention baselines under identical context and scoring prompts.",
+        "package_found": false,
+        "readiness_status": "package_not_installed"
+      },
+      {
+        "comparison_role": "serving_memory_manager",
+        "import_name": "vllm",
+        "measured_same_hardware": false,
+        "method": "vLLM/PagedAttention",
+        "next_step": "Run vLLM on the same host and capture KV residency plus throughput.",
+        "package_found": false,
+        "readiness_status": "package_not_installed"
+      },
+      {
+        "comparison_role": "retrieval_or_sparse_attention",
+        "import_name": "faiss",
+        "measured_same_hardware": false,
+        "method": "Sparse/Retrieval Attention",
+        "next_step": "Run a sparse/retrieval attention implementation on the same fixed corpus.",
+        "package_found": false,
+        "readiness_status": "package_not_installed"
+      }
+    ]
+  },
+  "charts": {
+    "next_adapter_latency": "charts/next_adapter_latency.svg",
+    "next_baseline_imports": "charts/next_baseline_imports.svg",
+    "next_cloudflare_ai": "charts/next_cloudflare_ai.svg",
+    "next_official_readiness": "charts/next_official_readiness.svg"
+  },
+  "claim_boundaries": {
+    "baseline_rows_are_import_readiness_until_measured": true,
+    "cloudflare_workers_ai_optional_provider": true,
+    "official_scores_not_yet_claimed": true,
+    "private_algorithms_remain_in": "catalyst_brain",
+    "public_adapter_latency_is_not_sdk_kernel_latency": true
+  },
+  "cloudflare_workers_ai": {
+    "account_id_present": true,
+    "api_token_present": false,
+    "docs_url": "https://developers.cloudflare.com/workers-ai/models/",
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "provider": "Cloudflare Workers AI",
+    "quality_probe": {
+      "latency_ms": null,
+      "prompt_count": 0,
+      "ran": false,
+      "score": null
+    },
+    "setup": {
+      "default_model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+      "optional_env": [
+        "CATALYST_CF_WORKERS_AI_MODEL"
+      ],
+      "required_env": [
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    "status": "skipped_missing_credentials"
+  },
+  "official_benchmark_readiness": {
+    "aggregate": {
+      "official_score_count": 0,
+      "source_reachable_count": 2,
+      "tracked_benchmark_count": 2
+    },
+    "rows": [
+      {
+        "dataset_id": "THUDM/LongBench-v2",
+        "name": "LongBench",
+        "next_step": "Run official LongBench/LongBench-v2 tasks against a model/API path with recorded dataset revision.",
+        "readiness_status": "source_reachable_runner_not_executed",
+        "runner_status": "not_run",
+        "source_reachable": true,
+        "source_url": "https://github.com/THUDM/LongBench"
+      },
+      {
+        "dataset_id": "NVIDIA/RULER",
+        "name": "RULER",
+        "next_step": "Run NVIDIA RULER configs at target context lengths and record exact task config.",
+        "readiness_status": "source_reachable_runner_not_executed",
+        "runner_status": "not_run",
+        "source_reachable": true,
+        "source_url": "https://github.com/NVIDIA/RULER"
+      }
+    ]
+  },
+  "public_adapter_latency": {
+    "aggregate": {
+      "passthrough_update_p50_us": 314.271,
+      "passthrough_update_p95_us": 477.625,
+      "refs_compact_saved_pct": 0.0,
+      "refs_total_compact_bytes": 161666,
+      "refs_update_p50_us": 297.1875,
+      "refs_update_p95_us": 468.084,
+      "updates": 512
+    },
+    "rows": [
+      {
+        "compression_report": {
+          "commercial_contact": "hello@strategic-innovations.ai",
+          "compact_record_bytes": 161162,
+          "layers": 4,
+          "mode": "passthrough",
+          "original_bytes_estimate": 120072,
+          "rain_header_bytes": 524,
+          "records": 512,
+          "saved_pct": 0.0,
+          "total_compact_bytes": 161686
+        },
+        "mean_us": 331.9849,
+        "mode": "passthrough",
+        "p50_us": 314.271,
+        "p95_us": 477.625,
+        "returned_passthrough": 512,
+        "returned_refs": 0,
+        "updates": 512
+      },
+      {
+        "compression_report": {
+          "commercial_contact": "hello@strategic-innovations.ai",
+          "compact_record_bytes": 161150,
+          "layers": 4,
+          "mode": "refs",
+          "original_bytes_estimate": 120072,
+          "rain_header_bytes": 516,
+          "records": 512,
+          "saved_pct": 0.0,
+          "total_compact_bytes": 161666
+        },
+        "mean_us": 325.4894,
+        "mode": "refs",
+        "p50_us": 297.1875,
+        "p95_us": 468.084,
+        "returned_passthrough": 0,
+        "returned_refs": 512,
+        "updates": 512
+      }
+    ]
+  },
+  "remaining_blockers": [
+    "Official LongBench/RULER scores still require running official task repos with pinned dataset revisions.",
+    "KIVI, TurboQuant, PyramidKV/H2O, vLLM/PagedAttention, and sparse/retrieval baselines still need imported implementation runs on the same hardware.",
+    "Public adapter timings measure wrapper overhead, not production catalyst-brain SDK kernel throughput.",
+    "Cloudflare Workers AI stronger-model probe requires CLOUDFLARE_API_TOKEN before it can run.",
+    "No official benchmark score is claimed in this artifact.",
+    "No modern baseline implementation has been measured on the same machine yet."
+  ],
+  "system_info": {
+    "platform": "macOS-26.4-arm64-arm-64bit",
+    "python": "3.9.6",
+    "suite": "next_evidence_tier",
+    "updates": 512
+  }
+}

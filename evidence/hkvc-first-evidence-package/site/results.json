@@ -1,0 +1,51 @@
+{
+  "compact_lane_metrics": {
+    "chunk_count_128k_tokens": 282,
+    "chunk_noise_floor_3sigma": 0.9998779222360098,
+    "chunk_token_limit": 455,
+    "compression_ratio_vs_standard": 907.8014184397163,
+    "early_token_resonance_score": 1.0,
+    "late_token_resonance_score": 1.0,
+    "max_chunk_tokens": 455,
+    "memory_footprint_128k_tokens_bytes": 18481152,
+    "recency_bias_variance": 0.0,
+    "single_accumulator_noise_floor_3sigma": 16.770509831248425,
+    "single_accumulator_sigma_noise": 5.5901699437494745
+  },
+  "dropin_cache_metrics": {
+    "available": true,
+    "causal_mask_policy": "exact_enforced_compact_past_only",
+    "compact_chunk_count_after_three_tokens": 3,
+    "compact_chunk_token_limit": 1,
+    "compact_memory_shape": [
+      1,
+      2,
+      16
+    ],
+    "compact_return_shape": [
+      1,
+      2,
+      1,
+      8
+    ],
+    "exact_return_shape": [
+      1,
+      2,
+      3,
+      8
+    ],
+    "hf_cache_subclass": true
+  },
+  "exact_lane_metrics": {
+    "accumulator_allocations_per_decode": 0,
+    "accumulator_reads_per_decode": 0,
+    "accumulator_writes_per_decode": 0,
+    "decode_latency_ns_per_token": 13,
+    "semantic_tensor_updates_per_decode": 0,
+    "state_payload_bytes": 512
+  },
+  "system_info": {
+    "d_dimension": 4096,
+    "precision": "complex64"
+  }
+}

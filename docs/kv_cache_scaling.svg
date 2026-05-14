@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660">
+<style>
+.title{font:700 25px system-ui,-apple-system,Segoe UI,sans-serif;fill:#111827}
+.subtitle{font:14px system-ui,-apple-system,Segoe UI,sans-serif;fill:#4b5563}
+.axis{font:600 14px system-ui,-apple-system,Segoe UI,sans-serif;fill:#374151}
+.tick{font:12px system-ui,-apple-system,Segoe UI,sans-serif;fill:#4b5563}
+.legend{font:13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#111827}
+.callout{font:700 14px system-ui,-apple-system,Segoe UI,sans-serif;fill:#065f46}
+</style>
+<rect x="0" y="0" width="1100" height="660" fill="#ffffff"/>
+<text x="92" y="32" class="title">KV-cache scaling: compression still grows, Catalyst stays fixed</text>
+<text x="92" y="54" class="subtitle">Model: 40 layers, hidden size 4096, FP16 K+V tensors. Both axes use log scale.</text>
+<line x1="92" y1="564" x2="830" y2="564" stroke="#111827"/>
+<line x1="92" y1="64" x2="92" y2="564" stroke="#111827"/>
+<line x1="92" y1="498.78" x2="830" y2="498.78" stroke="#e5e7eb"/>
+<text x="82" y="502.78" class="tick" text-anchor="end">0.0001</text>
+<line x1="92" y1="427.15" x2="830" y2="427.15" stroke="#e5e7eb"/>
+<text x="82" y="431.15" class="tick" text-anchor="end">0.001</text>
+<line x1="92" y1="355.52" x2="830" y2="355.52" stroke="#e5e7eb"/>
+<text x="82" y="359.52" class="tick" text-anchor="end">0.01</text>
+<line x1="92" y1="283.89" x2="830" y2="283.89" stroke="#e5e7eb"/>
+<text x="82" y="287.89" class="tick" text-anchor="end">0.1</text>
+<line x1="92" y1="212.26" x2="830" y2="212.26" stroke="#e5e7eb"/>
+<text x="82" y="216.26" class="tick" text-anchor="end">1</text>
+<line x1="92" y1="140.63" x2="830" y2="140.63" stroke="#e5e7eb"/>
+<text x="82" y="144.63" class="tick" text-anchor="end">10</text>
+<line x1="92" y1="69.00" x2="830" y2="69.00" stroke="#e5e7eb"/>
+<text x="82" y="73.00" class="tick" text-anchor="end">100</text>
+<line x1="92.00" y1="64" x2="92.00" y2="564" stroke="#f3f4f6"/>
+<text x="92.00" y="602" class="tick" text-anchor="middle">1K</text>
+<line x1="302.86" y1="64" x2="302.86" y2="564" stroke="#f3f4f6"/>
+<text x="302.86" y="602" class="tick" text-anchor="middle">4K</text>
+<line x1="513.71" y1="64" x2="513.71" y2="564" stroke="#f3f4f6"/>
+<text x="513.71" y="602" class="tick" text-anchor="middle">16K</text>
+<line x1="724.57" y1="64" x2="724.57" y2="564" stroke="#f3f4f6"/>
+<text x="724.57" y="602" class="tick" text-anchor="middle">64K</text>
+<line x1="830.00" y1="64" x2="830.00" y2="564" stroke="#f3f4f6"/>
+<text x="830.00" y="602" class="tick" text-anchor="middle">128K</text>
+<path d="M92.00,225.41 L302.86,182.28 L513.71,139.16 L724.57,96.03 L830.00,74.47" fill="none" stroke="#6b7280" stroke-width="3"/>
+<circle cx="92.00" cy="225.41" r="4" fill="#6b7280"/>
+<circle cx="302.86" cy="182.28" r="4" fill="#6b7280"/>
+<circle cx="513.71" cy="139.16" r="4" fill="#6b7280"/>
+<circle cx="724.57" cy="96.03" r="4" fill="#6b7280"/>
+<circle cx="830.00" cy="74.47" r="4" fill="#6b7280"/>
+<path d="M92.00,272.69 L302.86,229.56 L513.71,186.43 L724.57,143.31 L830.00,121.75" fill="none" stroke="#2563eb" stroke-width="3"/>
+<circle cx="92.00" cy="272.69" r="4" fill="#2563eb"/>
+<circle cx="302.86" cy="229.56" r="4" fill="#2563eb"/>
+<circle cx="513.71" cy="186.43" r="4" fill="#2563eb"/>
+<circle cx="724.57" cy="143.31" r="4" fill="#2563eb"/>
+<circle cx="830.00" cy="121.75" r="4" fill="#2563eb"/>
+<path d="M92.00,290.09 L302.86,246.97 L513.71,203.84 L724.57,160.72 L830.00,139.16" fill="none" stroke="#7c3aed" stroke-width="3"/>
+<circle cx="92.00" cy="290.09" r="4" fill="#7c3aed"/>
+<circle cx="302.86" cy="246.97" r="4" fill="#7c3aed"/>
+<circle cx="513.71" cy="203.84" r="4" fill="#7c3aed"/>
+<circle cx="724.57" cy="160.72" r="4" fill="#7c3aed"/>
+<circle cx="830.00" cy="139.16" r="4" fill="#7c3aed"/>
+<path d="M92.00,291.36 L302.86,248.24 L513.71,205.11 L724.57,161.99 L830.00,140.43" fill="none" stroke="#ea580c" stroke-width="3"/>
+<circle cx="92.00" cy="291.36" r="4" fill="#ea580c"/>
+<circle cx="302.86" cy="248.24" r="4" fill="#ea580c"/>
+<circle cx="513.71" cy="205.11" r="4" fill="#ea580c"/>
+<circle cx="724.57" cy="161.99" r="4" fill="#ea580c"/>
+<circle cx="830.00" cy="140.43" r="4" fill="#ea580c"/>
+<path d="M92.00,555.05 L302.86,555.05 L513.71,555.05 L724.57,555.05 L830.00,555.05" fill="none" stroke="#059669" stroke-width="4"/>
+<circle cx="92.00" cy="555.05" r="4" fill="#059669"/>
+<circle cx="302.86" cy="555.05" r="4" fill="#059669"/>
+<circle cx="513.71" cy="555.05" r="4" fill="#059669"/>
+<circle cx="724.57" cy="555.05" r="4" fill="#059669"/>
+<circle cx="830.00" cy="555.05" r="4" fill="#059669"/>
+<rect x="864" y="64" width="14" height="14" fill="#6b7280"/>
+<text x="886" y="76" class="legend">FP16 KV cache</text>
+<rect x="864" y="88" width="14" height="14" fill="#2563eb"/>
+<text x="886" y="100" class="legend">TurboQuant</text>
+<rect x="864" y="112" width="14" height="14" fill="#7c3aed"/>
+<text x="886" y="124" class="legend">KIVI 2-bit</text>
+<rect x="864" y="136" width="14" height="14" fill="#ea580c"/>
+<text x="886" y="148" class="legend">PyramidKV</text>
+<rect x="864" y="160" width="14" height="14" fill="#059669"/>
+<text x="886" y="172" class="legend">Catalyst Brain HKVC</text>
+<text x="120" y="98" class="callout">Catalyst is O(1): fixed 16,384 bytes</text>
+<text x="120" y="120" class="subtitle">At 128K tokens, modeled TurboQuant remains 1,120,000x larger than Catalyst state.</text>
+<text x="461.0" y="642" class="axis" text-anchor="middle">Context length</text>
+<text x="22" y="314.0" class="axis" text-anchor="middle" transform="rotate(-90 22 314.0)">KV/cache memory (GB)</text>
+</svg>

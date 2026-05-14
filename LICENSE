@@ -1,0 +1,28 @@
+Catalyst KV Cache Research and Evaluation License v1.0
+
+Copyright (c) 2026 Strategic Innovations AI. All rights reserved.
+
+Permission is granted, free of charge, to use, copy, modify, and publish
+benchmark results from this software for non-commercial research, academic,
+personal evaluation, and reproducibility work.
+
+This license does not grant rights for production use, commercial use,
+enterprise internal deployment, hosted services, paid products, model-serving
+infrastructure, revenue-generating workflows, resale, sublicensing, or use on
+behalf of a commercial customer.
+
+Commercial, production, enterprise, hosted, or pilot use requires a written
+license or pilot agreement from Strategic Innovations AI. Contact:
+
+hello@strategic-innovations.ai
+
+You may not remove copyright, patent, license, or commercial-contact notices
+from substantial copies of this software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR
+A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR PRODUCTION FITNESS. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+OTHER LIABILITY ARISING FROM USE OF THE SOFTWARE.
+
+Patent notice: U.S. Provisional Patent Application CATALYST-2026-001.

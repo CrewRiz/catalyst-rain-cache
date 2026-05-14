@@ -1,0 +1,55 @@
+{
+  "charts": {
+    "breakthrough_verdict": "charts/breakthrough_verdict.svg",
+    "claim_scope_matrix": "charts/claim_scope_matrix.svg"
+  },
+  "claims": {
+    "chunked_archive": {
+      "evidence_score": 70,
+      "status": "supporting_evidence",
+      "why": "Chunking solves accumulator saturation for archive storage. It is useful, but it is not the hot fixed-state breakthrough path."
+    },
+    "drop_in_lossless_kv_replacement": {
+      "evidence_score": 100,
+      "status": "supporting_evidence",
+      "why": "The SDK-backed lossless tier matches PyTorch scaled-dot-product attention within tolerance while keeping the local tensor window bounded. The scaled tier adds multiple tensor profiles and a small multi-layer decode stack. This supports universal lossless replacement only when exact state is retained or hydrated; it is not a fixed-size semantic compression claim."
+    },
+    "fixed_state_long_context_recall": {
+      "evidence_score": 100,
+      "status": "breakthrough",
+      "why": "1M 8B/GQA KV model is 131.072GB versus 16,384-byte Catalyst state; TinyLlama effective 2M target perplexity improves with recall; synthetic RULER/Needle far-context retrieval is 100%, the sliding-window recent-control passes, and wrong-position false positives are 0%."
+    },
+    "next_evidence_readiness": {
+      "evidence_score": 78,
+      "status": "readiness_tracked",
+      "why": "The next-tier artifact tracks official LongBench/RULER source readiness, public adapter latency, same-machine baseline import status, and Cloudflare Workers AI account/token/measurement status. It is readiness evidence, not official score evidence."
+    },
+    "pure_compact_semantic_equivalence": {
+      "evidence_score": 45,
+      "status": "not_yet_proven",
+      "why": "The repo now states compact semantic memory is lossy/semantic. Exact-key recall is strong; tier-two fixed-corpus evidence adds broader behavior, but semantic equivalence to arbitrary full attention still needs official model-level proof."
+    },
+    "stateless_private_ai_handoff": {
+      "evidence_score": 100,
+      "status": "breakthrough_candidate",
+      "why": "The payload/state profile is small enough for client-held or serverless handoff, but production encryption, signing, and multi-session serving tests remain required."
+    },
+    "tier2_fixed_corpus_evidence": {
+      "evidence_score": 100,
+      "status": "supporting_evidence",
+      "why": "The tier-two harness adds model-level target-PPL plumbing, six fixed-corpus QA/code/timeline/variable/multi-hop tasks, generation rubric scoring, and KIVI/TurboQuant/PyramidKV/H2O/vLLM/sparse baseline rows. It is supporting evidence, not an official LongBench/RULER result."
+    }
+  },
+  "do_not_claim_yet": [
+    "Pure compact semantic state is losslessly equivalent to full KV tensors.",
+    "Every transformer can drop in Catalyst compact state without exact-state transport, API hydration, or attention replacement.",
+    "Official LongBench/RULER production scores are solved; the tier-two tasks are fixed-corpus style, not official benchmark submissions.",
+    "Chunked archives are the hot O(1) decode path.",
+    "Scaled lossless operator profiles are full model generation-quality evidence.",
+    "A single Cloudflare Workers AI smoke probe is official LongBench/RULER or full generation-quality evidence.",
+    "Python prototype latency represents production kernel throughput."
+  ],
+  "overall_verdict": "breakthrough_with_scope",
+  "recommended_public_claim": "Catalyst HKVC demonstrates fixed-state far-context recall with bounded active-window execution, published TinyLlama effective-context quality, RULER/Needle-style retrieval evidence, and a tier-two fixed-corpus harness for model-level PPL, generation rubric, and baseline efficiency. The SDK-backed lossless tiers now show exact agreement with PyTorch scaled-dot-product attention when exact state is retained outside the bounded local window, including scaled tensor shapes and a small multi-layer decode stack. Describe universal lossless replacement as an exact-state/tiled-attention path, not as fixed-size lossy semantic compression.",
+  "short_answer": "Yes - for fixed-state long-context recall, bounded hot-cache private AI, stateless handoff, and the first exact-state lossless attention replacement path. Pure fixed-size compact state is still not a lossless replacement for arbitrary KV tensors."
+}

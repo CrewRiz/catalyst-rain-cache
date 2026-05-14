@@ -1,0 +1,75 @@
+{
+  "charts": {
+    "edge_native_architecture": "charts/edge_native_architecture.svg",
+    "memory_scaling": "charts/memory_scaling.svg",
+    "saturation_boundary": "charts/saturation_boundary.svg",
+    "transfer_time": "charts/transfer_time.svg"
+  },
+  "claim_boundaries": {
+    "active_window_remains_exact": true,
+    "compact_lane_is_semantic": true,
+    "not_exact_deep_context": true,
+    "pagedattention_replacement_claim": "HKVC is an alternate semantic deep-context lane; it is not an exact KV paging kernel.",
+    "rain_should_be_encrypted_for_production": true
+  },
+  "scenarios": [
+    {
+      "compression_ratio_vs_standard_kv": 907.8014184397163,
+      "edge_cache_total_bytes_with_exact_window": 152698880,
+      "exact_active_window_bytes": 134217728,
+      "hkvc_chunk_count": 282,
+      "hkvc_chunk_noise_floor_3sigma": 0.9998779222360098,
+      "hkvc_chunk_token_limit": 455,
+      "hkvc_chunked_bytes": 18481152,
+      "hkvc_chunked_mib": 17.625,
+      "hkvc_transfer_ms_at_32gb_s": 0.577536,
+      "single_accumulator_noise_floor_3sigma": 16.770509831248425,
+      "single_accumulator_sigma_noise": 5.5901699437494745,
+      "standard_kv_bytes": 16777216000,
+      "standard_kv_mib": 16000.0,
+      "standard_transfer_ms_at_32gb_s": 524.288,
+      "tokens": 128000
+    },
+    {
+      "compression_ratio_vs_standard_kv": 909.4138543516874,
+      "edge_cache_total_bytes_with_exact_window": 208011264,
+      "exact_active_window_bytes": 134217728,
+      "hkvc_chunk_count": 1126,
+      "hkvc_chunk_noise_floor_3sigma": 0.9998779222360098,
+      "hkvc_chunk_token_limit": 455,
+      "hkvc_chunked_bytes": 73793536,
+      "hkvc_chunked_mib": 70.375,
+      "hkvc_transfer_ms_at_32gb_s": 2.306048,
+      "single_accumulator_noise_floor_3sigma": 33.54101966249685,
+      "single_accumulator_sigma_noise": 11.180339887498949,
+      "standard_kv_bytes": 67108864000,
+      "standard_kv_mib": 64000.0,
+      "standard_transfer_ms_at_32gb_s": 2097.152,
+      "tokens": 512000
+    },
+    {
+      "compression_ratio_vs_standard_kv": 909.9181073703367,
+      "edge_cache_total_bytes_with_exact_window": 278265856,
+      "exact_active_window_bytes": 134217728,
+      "hkvc_chunk_count": 2198,
+      "hkvc_chunk_noise_floor_3sigma": 0.9998779222360098,
+      "hkvc_chunk_token_limit": 455,
+      "hkvc_chunked_bytes": 144048128,
+      "hkvc_chunked_mib": 137.375,
+      "hkvc_transfer_ms_at_32gb_s": 4.501504,
+      "single_accumulator_noise_floor_3sigma": 46.875,
+      "single_accumulator_sigma_noise": 15.625,
+      "standard_kv_bytes": 131072000000,
+      "standard_kv_mib": 125000.0,
+      "standard_transfer_ms_at_32gb_s": 4096.0,
+      "tokens": 1000000
+    }
+  ],
+  "system_info": {
+    "active_exact_window_tokens": 1024,
+    "chunk_token_limit": 455,
+    "d_dimension": 4096,
+    "pcie_bytes_per_second_assumption": 32000000000,
+    "precision": "complex64"
+  }
+}

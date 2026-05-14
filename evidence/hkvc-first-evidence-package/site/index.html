@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CATALYST HKVC Benchmark</title>
+  <style>
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #101827; background: #f8fafc; }
+    main { max-width: 1120px; margin: 0 auto; padding: 48px 24px 72px; }
+    h1 { font-size: clamp(32px, 5vw, 58px); line-height: 1; margin: 0 0 18px; }
+    h2 { font-size: 22px; margin-top: 36px; }
+    p, li { font-size: 17px; line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
+    .metric { border: 1px solid #d8dee9; border-radius: 8px; padding: 16px; background: #ffffff; }
+    .metric strong { display: block; font-size: 28px; margin-top: 8px; overflow-wrap: anywhere; }
+    .metric small { color: #526173; display: block; margin-top: 6px; line-height: 1.4; }
+    .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-top: 20px; }
+    .chart-card { border: 1px solid #d8dee9; border-radius: 8px; background: #ffffff; padding: 14px; }
+    .chart-card img { display: block; width: 100%; height: auto; }
+    .note { border-left: 4px solid #0f766e; background: #eefcf8; padding: 14px 16px; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 18px; background: #ffffff; border: 1px solid #d8dee9; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 14px; }
+    th { color: #334155; background: #f1f5f9; }
+    code { background: #e2e8f0; padding: 2px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>CATALYST HKVC: A Mixed-Fidelity, State-in-Payload Cache</h1>
+  <p>Standard transformer KV-caches grow linearly (<code>O(N)</code>) with context length, and compressed alternatives introduce severe recency bias. CATALYST HKVC introduces a two-lane hypervector cache runtime to eliminate both bottlenecks.</p>
+  <ol>
+    <li><strong>Exact Lane (Zero-Tax Decode):</strong> A payload-native exact state machine. When full semantic memory isn't required, decode kernels completely bypass accumulator allocation, tracking, and serialization. O(1) latency per token.</li>
+    <li><strong>Compact Semantic Lane (Recency-Unbiased):</strong> When long-context semantic compression is needed, exact state is explicitly promoted into SDK-owned fixed-size archives. The public repo reports behavior and boundaries; the private representation lives inside Catalyst Brain.</li>
+    <li><strong>State-in-Payload:</strong> Both lanes serialize entirely into RAIN (<code>.rain</code>) state packages, carrying computation state across ephemeral nodes without external database reads.</li>
+  </ol>
+  <h2>Saturation Boundary</h2>
+  <p>A single accumulator is not advertised as a perfect 128K-token store. Crosstalk noise scales as <code>sqrt(N / D)</code>, so the safe <code>3 sigma</code> boundary is <code>N ~= D / 9</code>. For <code>D = 4096</code>, CATALYST HKVC chunks the compact lane at 455 tokens per accumulator and stores many bounded accumulators instead of one saturated field.</p>
+  <h2>Drop-in Cache Contract</h2>
+  <p>The Hugging Face cache bridge preserves standard tensor shapes. Exact mode returns concatenated tensors shaped <code>(batch, heads, seq_len, head_dim)</code>. Compact semantic mode calls the Catalyst Brain SDK to materialize a bounded response shaped for standard attention layers. Causal masking is enforced in exact mode; compact state is treated as already-past accumulated knowledge.</p>
+  <h2>Benchmark Results</h2>
+  <div class="grid" id="metrics"></div>
+  <h2>Breakthrough Verdict</h2>
+  <p id="breakthrough-copy"></p>
+  <div class="grid" id="breakthrough-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/breakthrough_verdict.svg" alt="Breakthrough verdict chart"></div>
+    <div class="chart-card"><img src="charts/claim_scope_matrix.svg" alt="Claim scope matrix chart"></div>
+  </div>
+  <h2>Fixed-State Quality Evidence</h2>
+  <p>This is the primary O(1) evidence lane: fixed Catalyst state carries far-context recall while the active exact window remains bounded. The TinyLlama result is an effective-context integration: Catalyst recalls the far fact and materializes it into the active prompt; it is not a raw RoPE extension claim.</p>
+  <div class="grid" id="fixed-state-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/fixed_state_memory.svg" alt="Fixed-state memory scaling chart"></div>
+    <div class="chart-card"><img src="charts/quality_perplexity.svg" alt="TinyLlama perplexity chart"></div>
+    <div class="chart-card"><img src="charts/retrieval_quality.svg" alt="Retrieval quality chart"></div>
+    <div class="chart-card"><img src="charts/baseline_comparison.svg" alt="Modern baseline memory comparison chart"></div>
+  </div>
+  <h2>RULER/Needle-Style Suite</h2>
+  <p>This synthetic suite exercises fixed-state far-context retrieval across single-needle, multi-needle, duplicate/latest-position, and wrong-position rejection tasks. The sliding-window baseline includes a recent-window positive control so its far-context miss rate is not mistaken for a broken baseline. Linear scan can retrieve retained records, but its memory and work grow with retained items.</p>
+  <div class="grid" id="ruler-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/ruler_accuracy.svg" alt="RULER Needle accuracy chart"></div>
+    <div class="chart-card"><img src="charts/ruler_latency.svg" alt="RULER Needle latency chart"></div>
+    <div class="chart-card"><img src="charts/ruler_memory.svg" alt="RULER Needle memory chart"></div>
+    <div class="chart-card"><img src="charts/ruler_baselines.svg" alt="RULER Needle baseline outcome chart"></div>
+  </div>
+  <h2>Manifold Attention Gap-Closing Tier</h2>
+  <p>This tier tests the SDK-owned deep-context attention path against a compact proxy baseline. The public repo publishes benchmark inputs, outputs, charts, and boundaries while keeping the implementation inside Catalyst Brain.</p>
+  <div class="grid" id="manifold-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/manifold_accuracy.svg" alt="Manifold attention accuracy chart"></div>
+    <div class="chart-card"><img src="charts/manifold_quality_gap.svg" alt="Manifold attention quality gap chart"></div>
+    <div class="chart-card"><img src="charts/manifold_memory.svg" alt="Manifold attention memory chart"></div>
+    <div class="chart-card"><img src="charts/manifold_architecture.svg" alt="Manifold attention architecture diagram"></div>
+  </div>
+  <h2>Lossless Replacement Tier</h2>
+  <p>This tier separates universal exactness from compact semantic compression. The SDK retains exact state outside the bounded local tensor window and evaluates attention in bounded tiles, then compares the output against PyTorch scaled-dot-product attention.</p>
+  <div class="grid" id="lossless-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/lossless_equivalence.svg" alt="Lossless equivalence chart"></div>
+    <div class="chart-card"><img src="charts/lossless_memory.svg" alt="Lossless memory placement chart"></div>
+  </div>
+  <h2>Scaled Lossless Profiles</h2>
+  <p>This tier broadens the exact-state path across decode overflow, causal prefill, additive masks, and a three-layer decode stack. It is operator-level evidence, not a full model-generation benchmark.</p>
+  <div class="grid" id="lossless-scale-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/lossless_scale_accuracy.svg" alt="Scaled lossless accuracy chart"></div>
+    <div class="chart-card"><img src="charts/lossless_scale_memory.svg" alt="Scaled lossless memory placement chart"></div>
+    <div class="chart-card"><img src="charts/lossless_scale_latency.svg" alt="Scaled lossless latency chart"></div>
+  </div>
+  <h2>Tier-Two Evidence Package</h2>
+  <p>This tier adds broader fixed-corpus tasks, model-level target perplexity, generation rubric scoring, and modeled comparisons against KIVI, TurboQuant, PyramidKV/H2O-style retention, vLLM/PagedAttention, and sparse or retrieval-based attention. It is not an official LongBench/RULER submission; it is a checked-in harness for the next evidence tier.</p>
+  <div class="grid" id="tier2-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/tier2_perplexity.svg" alt="Tier-two model-level perplexity chart"></div>
+    <div class="chart-card"><img src="charts/tier2_longbench_ruler.svg" alt="Tier-two extended task accuracy chart"></div>
+    <div class="chart-card"><img src="charts/tier2_generation_quality.svg" alt="Tier-two generation quality chart"></div>
+    <div class="chart-card"><img src="charts/tier2_baseline_memory.svg" alt="Tier-two baseline memory chart"></div>
+    <div class="chart-card"><img src="charts/tier2_latency_throughput.svg" alt="Tier-two latency and throughput chart"></div>
+  </div>
+  <h2>Next Evidence Tier</h2>
+  <p>This tier tracks launch-grade evidence readiness: official LongBench/RULER source reachability, same-machine baseline import status, public adapter latency, and Cloudflare Workers AI stronger-model probing.</p>
+  <div class="grid" id="next-evidence-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/next_official_readiness.svg" alt="Official benchmark readiness chart"></div>
+    <div class="chart-card"><img src="charts/next_adapter_latency.svg" alt="Public adapter latency chart"></div>
+    <div class="chart-card"><img src="charts/next_baseline_imports.svg" alt="Baseline import readiness chart"></div>
+    <div class="chart-card"><img src="charts/next_cloudflare_ai.svg" alt="Cloudflare Workers AI probe status chart"></div>
+  </div>
+  <h2>Official Benchmark Subset</h2>
+  <p>This tier runs official-source LongBench v2 and RULER subsets through Cloudflare Workers AI. The checked RULER run uses an explicitly labeled answer-only prompt wrapper with the official answer prefix; this fixed the variable-tracking answer-budget failure while keeping the subset boundary visible. It is not a full official submission and is not a Catalyst adapter quality number until the runner is connected to the live Catalyst model path.</p>
+  <div class="grid" id="official-benchmark-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/official_longbench_accuracy.svg" alt="Official LongBench v2 subset accuracy chart"></div>
+    <div class="chart-card"><img src="charts/official_ruler_accuracy.svg" alt="Official RULER generated subset chart"></div>
+  </div>
+  <h2>RAIN Worker Transport</h2>
+  <p>The next serving path avoids raw-prompt payload failures by sending packed tokens or RAIN (<code>.rain</code>) state to a Worker that privately calls Catalyst Brain. The public adapter owns only the transport envelope and metadata; lossless binding, retrieval, rehydration, and active-context materialization remain behind the SDK boundary.</p>
+  <div class="grid" id="rain-transport-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/rain_worker_transport.svg" alt="Catalyst RAIN Worker packed token transport diagram"></div>
+    <div class="chart-card"><img src="charts/rain_transport_payload.svg" alt="RAIN Worker packed-token payload chart"></div>
+  </div>
+  <h2>Optional Chunk Archive Evidence</h2>
+  <p>This benchmark compares ordinary transformer KV residency against chunked HKVC archive memory for 128K, 512K, and 1M tokens. It is a saturation-safe semantic archive model, not the hot decode path and not the headline fixed-state claim.</p>
+  <div class="grid" id="private-metrics"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><img src="charts/memory_scaling.svg" alt="Memory scaling chart"></div>
+    <div class="chart-card"><img src="charts/transfer_time.svg" alt="Transfer time chart"></div>
+    <div class="chart-card"><img src="charts/saturation_boundary.svg" alt="Saturation boundary chart"></div>
+    <div class="chart-card"><img src="charts/edge_native_architecture.svg" alt="Edge native cache architecture diagram"></div>
+  </div>
+  <table id="private-table" aria-label="Private AI benchmark scenarios"></table>
+  <p class="note">Claim boundary: the fixed-state lane is the O(1) headline. Chunked archives are optional semantic storage with deterministic fixed-size chunks. Production RAIN (<code>.rain</code>) payloads should be encrypted and authenticated before client-held or cross-node transport.</p>
+</main>
+<script>
+async function loadResults() {
+  const response = await fetch("results.json");
+  const data = await response.json();
+  const metrics = [
+    ["Exact decode ns/token", data.exact_lane_metrics.decode_latency_ns_per_token],
+    ["Exact accumulator allocations", data.exact_lane_metrics.accumulator_allocations_per_decode],
+    ["Compact bytes at 128K", data.compact_lane_metrics.memory_footprint_128k_tokens_bytes],
+    ["Compression ratio", Number(data.compact_lane_metrics.compression_ratio_vs_standard).toFixed(2) + "x"],
+    ["Chunk token limit", data.compact_lane_metrics.chunk_token_limit],
+    ["Chunks at 128K", data.compact_lane_metrics.chunk_count_128k_tokens],
+    ["Single-accumulator 3sigma", Number(data.compact_lane_metrics.single_accumulator_noise_floor_3sigma).toFixed(2)],
+    ["Chunk 3sigma", Number(data.compact_lane_metrics.chunk_noise_floor_3sigma).toFixed(2)],
+    ["HF Cache subclass", String(data.dropin_cache_metrics.hf_cache_subclass)],
+    ["Exact return shape", data.dropin_cache_metrics.exact_return_shape.join(" x ")],
+    ["Compact return shape", data.dropin_cache_metrics.compact_return_shape.join(" x ")],
+    ["HF chunks after 3 tokens", data.dropin_cache_metrics.compact_chunk_count_after_three_tokens],
+    ["Early resonance", Number(data.compact_lane_metrics.early_token_resonance_score).toFixed(4)],
+    ["Late resonance", Number(data.compact_lane_metrics.late_token_resonance_score).toFixed(4)],
+    ["Recency variance", Number(data.compact_lane_metrics.recency_bias_variance).toFixed(6)]
+  ];
+  document.getElementById("metrics").innerHTML = metrics.map(([label, value]) => `<div class="metric">${label}<strong>${value}</strong></div>`).join("");
+}
+async function loadBreakthroughAssessment() {
+  const response = await fetch("breakthrough_assessment.json");
+  const data = await response.json();
+  document.getElementById("breakthrough-copy").textContent = data.short_answer;
+  const claims = data.claims;
+  const metrics = [
+    ["Overall", data.overall_verdict.replaceAll("_", " "), data.recommended_public_claim],
+    ["Fixed recall", claims.fixed_state_long_context_recall.status, claims.fixed_state_long_context_recall.why],
+    ["Stateless handoff", claims.stateless_private_ai_handoff.status, claims.stateless_private_ai_handoff.why],
+    ["Lossless KV", claims.drop_in_lossless_kv_replacement.status, claims.drop_in_lossless_kv_replacement.why],
+    ["Compact equivalence", claims.pure_compact_semantic_equivalence.status, claims.pure_compact_semantic_equivalence.why],
+    ["Chunk archive", claims.chunked_archive.status, claims.chunked_archive.why]
+  ];
+  document.getElementById("breakthrough-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadPrivateResults() {
+  const response = await fetch("private_context_results.json");
+  const data = await response.json();
+  const oneMillion = data.scenarios.find((item) => item.tokens === 1000000) || data.scenarios[data.scenarios.length - 1];
+  const metrics = [
+    ["1M standard KV", formatBytes(oneMillion.standard_kv_bytes), "Baseline tensor residency under the published shape assumptions."],
+    ["1M HKVC chunks", formatBytes(oneMillion.hkvc_chunked_bytes), `${oneMillion.hkvc_chunk_count} chunks at ${oneMillion.hkvc_chunk_token_limit} tokens/chunk.`],
+    ["1M transfer estimate", `${oneMillion.hkvc_transfer_ms_at_32gb_s.toFixed(2)} ms`, "Compact payload over a 32 GB/s interconnect assumption."],
+    ["Compression ratio", `${oneMillion.compression_ratio_vs_standard_kv.toFixed(0)}x`, "Compact HKVC deep context compared with standard KV bytes."],
+    ["Chunk noise floor", oneMillion.hkvc_chunk_noise_floor_3sigma.toFixed(4), "3 sigma remains under the signal=1 boundary."],
+    ["Single accumulator floor", oneMillion.single_accumulator_noise_floor_3sigma.toFixed(2), "Shows why one giant accumulator is not the claim."]
+  ];
+  document.getElementById("private-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+  document.getElementById("private-table").innerHTML = [
+    "<thead><tr><th>Tokens</th><th>Standard KV</th><th>HKVC deep context</th><th>Chunks</th><th>32 GB/s transfer</th></tr></thead>",
+    "<tbody>",
+    ...data.scenarios.map((item) => `<tr><td>${item.tokens.toLocaleString()}</td><td>${formatBytes(item.standard_kv_bytes)}</td><td>${formatBytes(item.hkvc_chunked_bytes)}</td><td>${item.hkvc_chunk_count}</td><td>${item.hkvc_transfer_ms_at_32gb_s.toFixed(2)} ms</td></tr>`),
+    "</tbody>"
+  ].join("");
+}
+function formatBytes(value) {
+  const units = ["B", "KiB", "MiB", "GiB", "TiB"];
+  let current = value;
+  for (const unit of units) {
+    if (current < 1024 || unit === units[units.length - 1]) {
+      return `${current.toFixed(1)} ${unit}`;
+    }
+    current /= 1024;
+  }
+  return `${current.toFixed(1)} TiB`;
+}
+loadResults();
+async function loadFixedStateResults() {
+  const response = await fetch("fixed_state_quality_results.json");
+  const data = await response.json();
+  const llama = data.memory_profiles.llama8b_gqa;
+  const tiny = data.tinyllama_effective_2m;
+  const secret = data.million_token_secret_retrieval;
+  const scaling = data.hkvc_query_scaling;
+  const metrics = [
+    ["1M standard KV", formatBytes(llama.standard_kv_bytes_1m), "8B/GQA profile: 32 layers, 8 KV heads, 128 head dim, FP16 K/V."],
+    ["Catalyst state", formatBytes(llama.catalyst_state_bytes), "Fixed far-context state, independent of logical token count."],
+    ["Bounded hot cache", formatBytes(llama.bounded_hot_cache_bytes), "1,024 exact tokens plus fixed Catalyst state."],
+    ["1M secret retrieval", `${secret.retrieval_accuracy_pct.toFixed(1)}%`, `${secret.trials} independent 256-bit trials.`],
+    ["TinyLlama PPL gain", `${tiny.ppl_improvement_x.toFixed(2)}x`, `${tiny.target_ppl_without_recall.toFixed(2)} to ${tiny.target_ppl_with_recall.toFixed(2)} target perplexity.`],
+    ["Latency span", `${scaling.median_latency_span_us.toFixed(3)} us`, "Exact-key median latency span across the scaling run."]
+  ];
+  document.getElementById("fixed-state-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadRulerResults() {
+  const response = await fetch("ruler_needle_results.json");
+  const data = await response.json();
+  const wrong = data.scenarios.find((item) => item.name === "wrong_position_rejection");
+  const single = data.scenarios.find((item) => item.name === "single_needle");
+  const metrics = [
+    ["Catalyst retrieval", `${data.aggregate.catalyst_mean_retrieval_accuracy_pct.toFixed(1)}%`, "Mean over single, multi, and duplicate/latest-position retrieval tasks."],
+    ["Sliding far retrieval", `${data.aggregate.sliding_window_far_context_retrieval_accuracy_pct.toFixed(1)}%`, "Far-context needles are outside the recent window."],
+    ["Sliding recent control", `${data.aggregate.sliding_window_recent_window_accuracy_pct.toFixed(1)}%`, "Positive control proves the bounded baseline works when the needle is in-window."],
+    ["False positives", `${data.aggregate.adversarial_false_positive_pct.toFixed(1)}%`, "Wrong-position rejection uses the exact-key guard before fallback."],
+    ["Catalyst state", formatBytes(data.aggregate.catalyst_state_bytes), "Fixed state across all suite scenarios."],
+    ["1M standard KV", formatBytes(data.baselines.standard_kv_attention.standard_kv_bytes_1m_8b_gqa), "8B/GQA FP16 K/V memory model."],
+    ["Single-needle QPS", `${single.throughput_queries_per_second.toFixed(0)}`, "Batch query throughput for the single-needle scenario."]
+  ];
+  if (wrong) {
+    metrics.push(["Reject median", `${wrong.catalyst_median_us.toFixed(2)} us`, "Exact guard rejection short-circuits approximate fallback."]);
+  }
+  document.getElementById("ruler-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadManifoldResults() {
+  const response = await fetch("manifold_attention_results.json");
+  const data = await response.json();
+  const aggregate = data.aggregate;
+  const metrics = [
+    ["Manifold top-1", `${aggregate.manifold_accuracy_pct.toFixed(1)}%`, "Far-context target retrieval using Catalyst SDK fixed state."],
+    ["Compact proxy top-1", `${aggregate.compact_proxy_accuracy_pct.toFixed(1)}%`, "Earlier single-proxy gap baseline, not the production target."],
+    ["Cosine to full softmax", aggregate.mean_cosine_to_full_softmax.toFixed(3), "Mean similarity to the full attention reference output."],
+    ["Proxy cosine", aggregate.compact_proxy_mean_cosine_to_full_softmax.toFixed(3), "Single compact proxy similarity to full attention."],
+    ["SDK state", formatBytes(aggregate.sketch_state_bytes), "Fixed SDK-owned state for the benchmark dimensions."],
+    ["State reduction", `${aggregate.state_reduction_vs_standard_x.toFixed(1)}x`, "Versus standard KV bytes under the benchmark shape assumptions."],
+    ["Median query", `${aggregate.median_query_us.toFixed(2)} us`, "Pure-Python prototype timing; kernel work remains future evidence."],
+    ["Router compatible", String(aggregate.quantum_router_compatible), "Designed for SDK-owned bounded routing."]
+  ];
+  document.getElementById("manifold-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadTier2Results() {
+  const response = await fetch("tier2_evidence_results.json");
+  const data = await response.json();
+  const ppl = data.model_level_perplexity;
+  const retrieval = data.extended_longbench_ruler.aggregate;
+  const quality = data.generation_quality.aggregate;
+  const efficiency = data.baseline_efficiency.aggregate;
+  const catalyst = data.baseline_efficiency.rows.find((row) => row.method === "Catalyst ManifoldAttention");
+  const metrics = [
+    ["PPL model", ppl.model_name, `${ppl.status}; target-answer perplexity with retrieved context materialized into prompt.`],
+    ["PPL improvement", ppl.aggregate.catalyst_ppl_improvement_x === null ? "n/a" : `${ppl.aggregate.catalyst_ppl_improvement_x.toFixed(3)}x`, "Measured fixed-corpus target-answer perplexity; official benchmark runs remain future evidence."],
+    ["Extended tasks", `${retrieval.catalyst_accuracy_pct.toFixed(1)}%`, `${retrieval.task_count} fixed-corpus QA/code/timeline/variable/multi-hop tasks.`],
+    ["Generation rubric", `${(quality.mean_rubric_score * 100).toFixed(1)}%`, "Required facts present and forbidden facts absent."],
+    ["Catalyst state", formatBytes(catalyst.memory_bytes), "Fixed sketch plus bounded anchor reservoir for the tier-two run."],
+    ["Memory reduction", `${efficiency.catalyst_memory_reduction_vs_fp16_x.toFixed(0)}x`, "Versus modeled FP16 KV at 128K logical tokens."],
+    ["Measured query", `${catalyst.query_latency_us.toFixed(1)} us`, "Pure-Python prototype row; kernel throughput remains future evidence."],
+    ["Baseline rows", String(data.baseline_efficiency.rows.length), "Includes KIVI, TurboQuant, PyramidKV, H2O, vLLM, and sparse/retrieval attention."]
+  ];
+  document.getElementById("tier2-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadLosslessResults() {
+  const response = await fetch("lossless_equivalence_results.json");
+  const data = await response.json();
+  const aggregate = data.aggregate;
+  const metrics = [
+    ["Equivalence", `${aggregate.allclose_pct.toFixed(1)}%`, "All trials match PyTorch scaled-dot-product attention within tolerance."],
+    ["Max abs error", aggregate.max_abs_error.toExponential(2), "Largest absolute output difference recorded in the run."],
+    ["Logical tokens", String(aggregate.max_logical_tokens), "Exact state length tested by the lossless tier."],
+    ["Local window", String(aggregate.max_local_window_tokens), "Bounded tensor window retained in the local cache."],
+    ["Scenarios", String(aggregate.scenario_count), aggregate.scenario_modes.join(", ")],
+    ["Local reduction", `${aggregate.local_vram_reduction_vs_standard_x.toFixed(1)}x`, "Standard KV bytes divided by local tensor-window bytes."],
+    ["Exact payload ratio", `${aggregate.exact_payload_ratio_vs_standard.toFixed(2)}x`, "Exactness requires retaining or hydrating the full exact state outside the compact lane."],
+    ["Throughput", `${aggregate.throughput_queries_per_second.toFixed(0)} q/s`, "CPU/Python evidence-run timing; production kernel throughput remains future work."]
+  ];
+  document.getElementById("lossless-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadLosslessScaleResults() {
+  const response = await fetch("lossless_scale_results.json");
+  const data = await response.json();
+  const aggregate = data.aggregate;
+  const metrics = [
+    ["Profile coverage", String(aggregate.profile_count), aggregate.profile_modes.join(", ")],
+    ["Equivalence", `${aggregate.allclose_pct.toFixed(1)}%`, "All scaled profiles match PyTorch scaled-dot-product attention within tolerance."],
+    ["Max abs error", aggregate.max_abs_error.toExponential(2), "Largest absolute output difference across scaled profiles."],
+    ["Logical tokens", String(aggregate.max_logical_tokens), "Largest exact state length in the scaled tier."],
+    ["Max layers", String(aggregate.max_layers), "Layer stack profile exercises independent per-layer state."],
+    ["Local reduction", `${aggregate.min_local_vram_reduction_vs_standard_x.toFixed(1)}x`, "Minimum standard-KV bytes divided by local tensor-window bytes."],
+    ["Throughput", `${aggregate.throughput_queries_per_second.toFixed(0)} q/s`, "CPU/Python evidence-run timing; production kernels remain future work."],
+    ["Claim boundary", String(data.claim_boundaries.operator_level_not_full_model_generation), "This is operator-level evidence, not a generation-quality claim."]
+  ];
+  document.getElementById("lossless-scale-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadNextEvidenceResults() {
+  const response = await fetch("next_evidence_results.json");
+  const data = await response.json();
+  const official = data.official_benchmark_readiness.aggregate;
+  const adapter = data.public_adapter_latency.aggregate;
+  const baselines = data.baseline_import_readiness.aggregate;
+  const cf = data.cloudflare_workers_ai;
+  const cfScore = cf.quality_probe && cf.quality_probe.score !== null ? `${(cf.quality_probe.score * 100).toFixed(1)}%` : "not run";
+  const metrics = [
+    ["Official sources", `${official.source_reachable_count}/${official.tracked_benchmark_count}`, "LongBench/RULER sources reachable; official scores are not claimed yet."],
+    ["Official scores", String(official.official_score_count), "Must remain zero until official runners execute with pinned revisions."],
+    ["Passthrough p50", `${adapter.passthrough_update_p50_us.toFixed(2)} us`, "Public adapter wrapper timing, not SDK kernel throughput."],
+    ["Refs p50", `${adapter.refs_update_p50_us.toFixed(2)} us`, "Reference-mode public adapter update timing."],
+    ["Baseline imports", `${baselines.importable_count}/${baselines.tracked_baseline_count}`, "KIVI/TurboQuant/PyramidKV/vLLM/sparse package readiness."],
+    ["Cloudflare AI", cf.status, `${cf.model}; account=${String(cf.account_id_present)}, token=${String(cf.api_token_present)}.`],
+    ["CF quality score", cfScore, "Runs only when Cloudflare credentials are available."],
+    ["Blockers", String(data.remaining_blockers.length), "Tracked before stronger public claims."]
+  ];
+  document.getElementById("next-evidence-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadOfficialBenchmarkResults() {
+  const response = await fetch("official_longbench_ruler_results.json");
+  const data = await response.json();
+  const lb = data.longbench_v2.aggregate;
+  const ruler = data.ruler.aggregate;
+  const system = data.system_info;
+  const metrics = [
+    ["LongBench accuracy", `${lb.accuracy_pct.toFixed(2)}%`, `${lb.sample_count} LongBench v2 examples, capped at ${system.max_input_tokens.toLocaleString()} input tokens.`],
+    ["LB long accuracy", `${lb.long_accuracy_pct.toFixed(2)}%`, "Accuracy on selected long-length rows."],
+    ["RULER mean", `${ruler.mean_score_pct.toFixed(2)}%`, `${ruler.prediction_count} predictions across ${ruler.task_length_count} task/length rows.`],
+    ["RULER min/max", `${ruler.min_score_pct.toFixed(1)} / ${ruler.max_score_pct.toFixed(1)}`, "Lowest and highest task/length scores."],
+    ["RULER prompt", system.ruler_prompt_mode, data.claim_boundaries.ruler_answer_only_prompt_wrapper ? "Uses official answer prefix plus answer-only wrapper." : "Uses benchmark prompt directly."],
+    ["Model", system.model.split("/").slice(-1)[0], "Cloudflare Workers AI inference path."],
+    ["Boundary", String(data.claim_boundaries.subset_not_full_official_submission), "Subset result, not full official submission."]
+  ];
+  document.getElementById("official-benchmark-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+async function loadRAINTransportResults() {
+  const response = await fetch("rain_transport_probe_results.json");
+  const data = await response.json();
+  const aggregate = data.aggregate;
+  const metrics = [
+    ["Packed/raw ratio", `${(aggregate.mean_packed_vs_raw_json_ratio * 100).toFixed(2)}%`, "Mean packed Worker JSON bytes versus raw Cloudflare chat JSON bytes."],
+    ["Mean raw JSON", formatBytes(aggregate.mean_raw_cloudflare_json_bytes), `${aggregate.sample_count} official LongBench v2 subset prompts.`],
+    ["Mean packed JSON", formatBytes(aggregate.mean_packed_worker_json_bytes), "Tokenizer metadata plus compressed token payload."],
+    ["Max raw JSON", formatBytes(aggregate.max_raw_cloudflare_json_bytes), "Largest raw chat payload in the subset."],
+    ["Max packed JSON", formatBytes(aggregate.max_packed_worker_json_bytes), "Largest packed Worker payload in the subset."],
+    ["Local truncation", String(data.system_info.local_truncation_disabled), "Transport probe keeps full prompt tokens before Worker handoff."]
+  ];
+  document.getElementById("rain-transport-metrics").innerHTML = metrics.map(([label, value, help]) => `<div class="metric">${label}<strong>${value}</strong><small>${help}</small></div>`).join("");
+}
+loadPrivateResults();
+loadFixedStateResults();
+loadRulerResults();
+loadManifoldResults();
+loadLosslessResults();
+loadLosslessScaleResults();
+loadTier2Results();
+loadNextEvidenceResults();
+loadOfficialBenchmarkResults();
+loadRAINTransportResults();
+loadBreakthroughAssessment();
+</script>
+</body>
+</html>

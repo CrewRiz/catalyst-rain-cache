@@ -1,0 +1,639 @@
+{
+  "baseline_efficiency": {
+    "aggregate": {
+      "catalyst_memory_rank": 1,
+      "catalyst_memory_reduction_vs_fp16_x": 127007.75193798449,
+      "fp16_kv_bytes": 16777216000
+    },
+    "profile": "8B/GQA-like FP16 KV memory model unless row notes say measured",
+    "rows": [
+      {
+        "measurement_kind": "modeled_full_attention",
+        "memory_bytes": 16777216000,
+        "memory_ratio_vs_fp16": 1.0,
+        "method": "FP16 KV",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 2585.0,
+        "retained_token_work_units": 128000,
+        "throughput_queries_per_second": 386.8472
+      },
+      {
+        "measurement_kind": "modeled_quantized_linear",
+        "memory_bytes": 2097152000,
+        "memory_ratio_vs_fp16": 0.125,
+        "method": "KIVI 2-bit",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 345.0,
+        "retained_token_work_units": 128000,
+        "throughput_queries_per_second": 2898.5507
+      },
+      {
+        "measurement_kind": "modeled_quantized_linear",
+        "memory_bytes": 3670016000,
+        "memory_ratio_vs_fp16": 0.21875,
+        "method": "TurboQuant 3.5-bit",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 585.0,
+        "retained_token_work_units": 128000,
+        "throughput_queries_per_second": 1709.4017
+      },
+      {
+        "measurement_kind": "modeled_retention",
+        "memory_bytes": 2013265920,
+        "memory_ratio_vs_fp16": 0.12,
+        "method": "PyramidKV 12%",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 61.864,
+        "retained_token_work_units": 15360,
+        "throughput_queries_per_second": 16164.4898
+      },
+      {
+        "measurement_kind": "modeled_retention",
+        "memory_bytes": 3355443200,
+        "memory_ratio_vs_fp16": 0.2,
+        "method": "H2O 20%",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 127.4,
+        "retained_token_work_units": 25600,
+        "throughput_queries_per_second": 7849.2936
+      },
+      {
+        "measurement_kind": "modeled_paged_serving",
+        "memory_bytes": 17448304640,
+        "memory_ratio_vs_fp16": 1.04,
+        "method": "vLLM PagedAttention",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 2687.4,
+        "retained_token_work_units": 128000,
+        "throughput_queries_per_second": 372.1069
+      },
+      {
+        "measurement_kind": "modeled_retrieval_topk",
+        "memory_bytes": 671088640,
+        "memory_ratio_vs_fp16": 0.04,
+        "method": "Sparse/Retrieval Attention",
+        "notes": "Modeled comparison row, not an imported vendor implementation.",
+        "query_latency_us": 28.2768,
+        "retained_token_work_units": 4096,
+        "throughput_queries_per_second": 35364.6806
+      },
+      {
+        "measurement_kind": "measured_python_sdk",
+        "memory_bytes": 132096,
+        "memory_ratio_vs_fp16": 7.87353515625e-06,
+        "method": "Catalyst ManifoldAttention",
+        "notes": "Measured query over the fixed-corpora tier-two suite; production kernel evidence remains future work.",
+        "query_latency_us": 37224.6455,
+        "retained_token_work_units": 256,
+        "throughput_queries_per_second": 26.8639
+      }
+    ],
+    "tokens": 128000
+  },
+  "charts": {
+    "tier2_baseline_memory": "charts/tier2_baseline_memory.svg",
+    "tier2_generation_quality": "charts/tier2_generation_quality.svg",
+    "tier2_latency_throughput": "charts/tier2_latency_throughput.svg",
+    "tier2_longbench_ruler": "charts/tier2_longbench_ruler.svg",
+    "tier2_perplexity": "charts/tier2_perplexity.svg"
+  },
+  "claim_boundaries": {
+    "baselines_are_modeled_unless_marked_measured": true,
+    "fixed_corpora_are_checked_in": true,
+    "model_perplexity_uses_retrieved_context_materialization": true,
+    "not_a_lossless_full_kv_equivalence_proof": true,
+    "official_longbench": false,
+    "official_ruler": false
+  },
+  "extended_longbench_ruler": {
+    "aggregate": {
+      "catalyst_accuracy_pct": 83.3333,
+      "linear_oracle_accuracy_pct": 100.0,
+      "median_catalyst_query_us": 37224.6455,
+      "sliding_window_accuracy_pct": 0.0,
+      "sparse_retrieval_accuracy_pct": 83.3333,
+      "task_count": 6
+    },
+    "suite": "fixed_corpora_longbench_ruler_style",
+    "task_types": [
+      "contract_qa",
+      "code_config_lookup",
+      "operations_qa",
+      "timeline_lookup",
+      "variable_tracking",
+      "multi_hop_policy"
+    ],
+    "tasks": [
+      {
+        "answer": "ALPHA-17",
+        "catalyst_correct": true,
+        "catalyst_query_us": 33707.583,
+        "catalyst_retrieved_chunk": "The Northstar contract states that the renewal notice code is ALPHA-17 and the governing venue is Austin.",
+        "catalyst_retrieved_chunk_index": 1,
+        "domain": "contract",
+        "forbidden_facts": [
+          "BRAVO-99"
+        ],
+        "id": "contract_qa",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "The Northstar contract states that the renewal notice code is ALPHA-17 and the governing venue is Austin.",
+        "oracle_chunk_index": 1,
+        "question": "What renewal notice code belongs to the Northstar contract?",
+        "required_facts": [
+          "ALPHA-17",
+          "Northstar"
+        ],
+        "sliding_window_chunk": "The latest helpdesk note says weekend access requires a blue badge.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": true,
+        "sparse_retrieved_chunk": "The Northstar contract states that the renewal notice code is ALPHA-17 and the governing venue is Austin.",
+        "sparse_retrieved_chunk_index": 1
+      },
+      {
+        "answer": "passthrough",
+        "catalyst_correct": true,
+        "catalyst_query_us": 37795.209,
+        "catalyst_retrieved_chunk": "The KV adapter module exposes hydrate_cache_state; its safe default mode is passthrough.",
+        "catalyst_retrieved_chunk_index": 1,
+        "domain": "code",
+        "forbidden_facts": [
+          "refs"
+        ],
+        "id": "code_config",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "The KV adapter module exposes hydrate_cache_state; its safe default mode is passthrough.",
+        "oracle_chunk_index": 1,
+        "question": "Which safe default mode should the Catalyst KV adapter use?",
+        "required_facts": [
+          "passthrough",
+          "safe default"
+        ],
+        "sliding_window_chunk": "A later demo uses random tensor fixtures and should not be used for launch claims.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": true,
+        "sparse_retrieved_chunk": "The KV adapter module exposes hydrate_cache_state; its safe default mode is passthrough.",
+        "sparse_retrieved_chunk_index": 1
+      },
+      {
+        "answer": "pilot-ops@example.com",
+        "catalyst_correct": true,
+        "catalyst_query_us": 37251.791,
+        "catalyst_retrieved_chunk": "For private AI deployments, the escalation mailbox is pilot-ops@example.com and the retention window is 30 days.",
+        "catalyst_retrieved_chunk_index": 1,
+        "domain": "operations",
+        "forbidden_facts": [
+          "support@example.com"
+        ],
+        "id": "ops_mailbox",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "For private AI deployments, the escalation mailbox is pilot-ops@example.com and the retention window is 30 days.",
+        "oracle_chunk_index": 1,
+        "question": "What mailbox handles private AI pilot escalation?",
+        "required_facts": [
+          "pilot-ops@example.com",
+          "private AI"
+        ],
+        "sliding_window_chunk": "The dashboard refresh interval is five minutes during ordinary operations.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": true,
+        "sparse_retrieved_chunk": "For private AI deployments, the escalation mailbox is pilot-ops@example.com and the retention window is 30 days.",
+        "sparse_retrieved_chunk_index": 1
+      },
+      {
+        "answer": "2026-08-14",
+        "catalyst_correct": true,
+        "catalyst_query_us": 37197.5,
+        "catalyst_retrieved_chunk": "Release planning says the edge cache freeze is scheduled for 2026-08-14 after telemetry validation.",
+        "catalyst_retrieved_chunk_index": 1,
+        "domain": "project",
+        "forbidden_facts": [
+          "2026-07-01"
+        ],
+        "id": "timeline_lookup",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "Release planning says the edge cache freeze is scheduled for 2026-08-14 after telemetry validation.",
+        "oracle_chunk_index": 1,
+        "question": "On what date is the edge cache freeze scheduled?",
+        "required_facts": [
+          "2026-08-14",
+          "edge cache freeze"
+        ],
+        "sliding_window_chunk": "Operators should keep staging and production API keys separated.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": true,
+        "sparse_retrieved_chunk": "Release planning says the edge cache freeze is scheduled for 2026-08-14 after telemetry validation.",
+        "sparse_retrieved_chunk_index": 1
+      },
+      {
+        "answer": "HERMES-42",
+        "catalyst_correct": true,
+        "catalyst_query_us": 35806.708,
+        "catalyst_retrieved_chunk": "Variable codename is assigned HERMES-42 and must override the earlier placeholder.",
+        "catalyst_retrieved_chunk_index": 1,
+        "domain": "ruler",
+        "forbidden_facts": [
+          "ATLAS-09"
+        ],
+        "id": "ruler_variable_tracking",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "Variable codename is assigned HERMES-42 and must override the earlier placeholder.",
+        "oracle_chunk_index": 1,
+        "question": "What value is assigned to the session variable codename?",
+        "required_facts": [
+          "codename",
+          "HERMES-42"
+        ],
+        "sliding_window_chunk": "The last visible variable assigns codename to ATLAS-09 only in an obsolete example.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": true,
+        "sparse_retrieved_chunk": "Variable codename is assigned HERMES-42 and must override the earlier placeholder.",
+        "sparse_retrieved_chunk_index": 1
+      },
+      {
+        "answer": "Class C",
+        "catalyst_correct": false,
+        "catalyst_query_us": 38780.833,
+        "catalyst_retrieved_chunk": "Policy index: Northstar private AI pilots must use the retention class listed in Appendix Delta.",
+        "catalyst_retrieved_chunk_index": 0,
+        "domain": "policy",
+        "forbidden_facts": [
+          "Class A"
+        ],
+        "id": "multi_hop_policy",
+        "linear_oracle_correct": true,
+        "manifold_snapshot": {
+          "anchor_bytes": 4128,
+          "anchor_capacity": 8,
+          "anchor_count": 4,
+          "attention_operator": "closed_catalyst_sdk_operator",
+          "exact_window_capacity": 0,
+          "exact_window_tokens": 0,
+          "feature_dim": 256,
+          "hot_window_bytes": 0,
+          "key_dim": 128,
+          "memory_shape": "closed_catalyst_sdk_state",
+          "quantum_router_compatible": true,
+          "state_bytes": 132096,
+          "total_tokens": 4,
+          "value_dim": 128
+        },
+        "oracle_chunk": "Appendix Delta maps private AI pilot workloads to Class C retention with customer-held keys.",
+        "oracle_chunk_index": 2,
+        "question": "Which retention class applies to Northstar private AI pilots?",
+        "required_facts": [
+          "Northstar",
+          "Class C"
+        ],
+        "sliding_window_chunk": "Appendix Omega is a glossary and has no retention policy.",
+        "sliding_window_chunk_index": 3,
+        "sliding_window_correct": false,
+        "sparse_retrieval_correct": false,
+        "sparse_retrieved_chunk": "Policy index: Northstar private AI pilots must use the retention class listed in Appendix Delta.",
+        "sparse_retrieved_chunk_index": 0
+      }
+    ]
+  },
+  "generation_quality": {
+    "aggregate": {
+      "mean_rubric_score": 0.8666666666666667,
+      "sliding_mean_rubric_score": 0.20000000000000004,
+      "sparse_mean_rubric_score": 0.8666666666666667
+    },
+    "judge_rubric": {
+      "deterministic_extractive_generation": true,
+      "forbidden_fact_penalty": 0.2,
+      "required_fact_recall": 0.8
+    },
+    "rows": [
+      {
+        "catalyst_answer": "ALPHA-17. Evidence: The Northstar contract states that the renewal notice code is ALPHA-17 and the governing venue is Austin.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        },
+        "id": "contract_qa",
+        "prompt": "What renewal notice code belongs to the Northstar contract?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "ALPHA-17",
+            "Northstar"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "ALPHA-17. Evidence: The Northstar contract states that the renewal notice code is ALPHA-17 and the governing venue is Austin.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        }
+      },
+      {
+        "catalyst_answer": "passthrough. Evidence: The KV adapter module exposes hydrate_cache_state; its safe default mode is passthrough.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        },
+        "id": "code_config",
+        "prompt": "Which safe default mode should the Catalyst KV adapter use?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "passthrough",
+            "safe default"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "passthrough. Evidence: The KV adapter module exposes hydrate_cache_state; its safe default mode is passthrough.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        }
+      },
+      {
+        "catalyst_answer": "pilot-ops@example.com. Evidence: For private AI deployments, the escalation mailbox is pilot-ops@example.com and the retention window is 30 days.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        },
+        "id": "ops_mailbox",
+        "prompt": "What mailbox handles private AI pilot escalation?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "pilot-ops@example.com",
+            "private AI"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "pilot-ops@example.com. Evidence: For private AI deployments, the escalation mailbox is pilot-ops@example.com and the retention window is 30 days.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        }
+      },
+      {
+        "catalyst_answer": "2026-08-14. Evidence: Release planning says the edge cache freeze is scheduled for 2026-08-14 after telemetry validation.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        },
+        "id": "timeline_lookup",
+        "prompt": "On what date is the edge cache freeze scheduled?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "2026-08-14",
+            "edge cache freeze"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "2026-08-14. Evidence: Release planning says the edge cache freeze is scheduled for 2026-08-14 after telemetry validation.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        }
+      },
+      {
+        "catalyst_answer": "HERMES-42. Evidence: Variable codename is assigned HERMES-42 and must override the earlier placeholder.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        },
+        "id": "ruler_variable_tracking",
+        "prompt": "What value is assigned to the session variable codename?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "codename",
+            "HERMES-42"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "HERMES-42. Evidence: Variable codename is assigned HERMES-42 and must override the earlier placeholder.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [],
+          "score": 1.0
+        }
+      },
+      {
+        "catalyst_answer": "Insufficient evidence in retrieved context.",
+        "catalyst_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "Northstar",
+            "Class C"
+          ],
+          "score": 0.2
+        },
+        "id": "multi_hop_policy",
+        "prompt": "Which retention class applies to Northstar private AI pilots?",
+        "sliding_answer": "Insufficient evidence in retrieved context.",
+        "sliding_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "Northstar",
+            "Class C"
+          ],
+          "score": 0.2
+        },
+        "sparse_answer": "Insufficient evidence in retrieved context.",
+        "sparse_rubric": {
+          "forbidden_present": [],
+          "missing_required": [
+            "Northstar",
+            "Class C"
+          ],
+          "score": 0.2
+        }
+      }
+    ],
+    "suite": "fixed_prompt_generation_rubric"
+  },
+  "model_level_perplexity": {
+    "aggregate": {
+      "catalyst_ppl_improvement_x": 4.285187,
+      "mean_baseline_ppl": 475.59999216666665,
+      "mean_catalyst_ppl": 110.986986,
+      "mean_oracle_context_ppl": 13.036618500000001,
+      "mean_sparse_retrieval_ppl": 110.986986
+    },
+    "corpora": [
+      {
+        "baseline_ppl": 476.18335,
+        "catalyst_ppl": 9.378479,
+        "catalyst_retrieval_correct": true,
+        "domain": "contract",
+        "id": "contract_qa",
+        "oracle_context_ppl": 9.378479,
+        "sparse_retrieval_ppl": 9.378479,
+        "target": "ALPHA-17"
+      },
+      {
+        "baseline_ppl": 90.237083,
+        "catalyst_ppl": 29.945091,
+        "catalyst_retrieval_correct": true,
+        "domain": "code",
+        "id": "code_config",
+        "oracle_context_ppl": 29.945091,
+        "sparse_retrieval_ppl": 29.945091,
+        "target": "passthrough"
+      },
+      {
+        "baseline_ppl": 227.560654,
+        "catalyst_ppl": 4.190913,
+        "catalyst_retrieval_correct": true,
+        "domain": "operations",
+        "id": "ops_mailbox",
+        "oracle_context_ppl": 4.190913,
+        "sparse_retrieval_ppl": 4.190913,
+        "target": "pilot-ops@example.com"
+      },
+      {
+        "baseline_ppl": 103.508148,
+        "catalyst_ppl": 2.187834,
+        "catalyst_retrieval_correct": true,
+        "domain": "project",
+        "id": "timeline_lookup",
+        "oracle_context_ppl": 2.187834,
+        "sparse_retrieval_ppl": 2.187834,
+        "target": "2026-08-14"
+      },
+      {
+        "baseline_ppl": 1185.212891,
+        "catalyst_ppl": 4.439631,
+        "catalyst_retrieval_correct": true,
+        "domain": "ruler",
+        "id": "ruler_variable_tracking",
+        "oracle_context_ppl": 4.439631,
+        "sparse_retrieval_ppl": 4.439631,
+        "target": "HERMES-42"
+      },
+      {
+        "baseline_ppl": 770.897827,
+        "catalyst_ppl": 615.779968,
+        "catalyst_retrieval_correct": false,
+        "domain": "policy",
+        "id": "multi_hop_policy",
+        "oracle_context_ppl": 28.077763,
+        "sparse_retrieval_ppl": 615.779968,
+        "target": "Class C"
+      }
+    ],
+    "model_name": "distilgpt2",
+    "status": "measured"
+  },
+  "system_info": {
+    "corpus_domains": [
+      "code",
+      "contract",
+      "operations",
+      "policy",
+      "project",
+      "ruler"
+    ],
+    "logical_tokens_modeled": 128000,
+    "model_name": "distilgpt2",
+    "suite": "hkvc_tier2_evidence",
+    "task_count": 6
+  }
+}

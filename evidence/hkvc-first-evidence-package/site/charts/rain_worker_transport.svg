@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="430" viewBox="0 0 920 430">
+  <rect width="100%" height="100%" fill="#fbfaf7"/>
+  <style>
+    .title{font:700 25px Inter,Helvetica,Arial,sans-serif;fill:#111827}
+    .copy{font:13px Inter,Helvetica,Arial,sans-serif;fill:#4b5563}
+    .label{font:700 14px Inter,Helvetica,Arial,sans-serif;fill:#111827}
+    .small{font:12px Inter,Helvetica,Arial,sans-serif;fill:#374151}
+    .box{rx:8;stroke-width:1.5}
+  </style>
+  <text x="56" y="46" class="title">Catalyst RAIN Worker Transport</text>
+  <text x="56" y="74" class="copy">Public adapter packs context for transport; catalyst-brain owns binding, retrieval, rehydration, and active-context materialization.</text>
+
+  <rect class="box" x="58" y="130" width="160" height="92" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="138" y="164" text-anchor="middle" class="label">Official Prompt</text>
+  <text x="138" y="190" text-anchor="middle" class="small">LongBench/RULER</text>
+
+  <path d="M220 176 H285" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect class="box" x="288" y="118" width="170" height="116" fill="#fef3c7" stroke="#d97706"/>
+  <text x="373" y="154" text-anchor="middle" class="label">Packed Tokens</text>
+  <text x="373" y="179" text-anchor="middle" class="small">uint32le + gzip</text>
+  <text x="373" y="201" text-anchor="middle" class="small">prompt hash + metadata</text>
+
+  <path d="M460 176 H525" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect class="box" x="528" y="106" width="178" height="140" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="617" y="143" text-anchor="middle" class="label">RAIN Worker</text>
+  <text x="617" y="168" text-anchor="middle" class="small">SDK-owned lossless</text>
+  <text x="617" y="190" text-anchor="middle" class="small">binding and recall</text>
+  <text x="617" y="212" text-anchor="middle" class="small">no public internals</text>
+
+  <path d="M708 176 H773" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect class="box" x="776" y="130" width="100" height="92" fill="#fee2e2" stroke="#dc2626"/>
+  <text x="826" y="164" text-anchor="middle" class="label">Model</text>
+  <text x="826" y="190" text-anchor="middle" class="small">active slice</text>
+
+  <rect x="190" y="294" width="540" height="58" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="460" y="318" text-anchor="middle" class="label">Claim Boundary</text>
+  <text x="460" y="341" text-anchor="middle" class="small">This bypasses raw-prompt payload limits only when the Worker uses Catalyst state to materialize valid model input.</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+</svg>

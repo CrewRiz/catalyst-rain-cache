@@ -1,0 +1,26 @@
+tokens,method,memory_gb,memory_mb,relative_to_fp16_pct,note
+1000,FP16 KV cache,0.65536,655.36,100.0,Uncompressed transformer KV cache.
+1000,TurboQuant,0.14336,143.36,21.875,TurboQuant reports KV quality neutrality at 3.5 bits/channel.
+1000,KIVI 2-bit,0.08192,81.92,12.5,Raw 2-bit KV model versus FP16 cache.
+1000,PyramidKV,0.0786432,78.6432,12.0,Paper reports full-cache performance with 12% KV retention.
+1000,Catalyst Brain HKVC,1.6384e-05,0.016384,0.0025,Fixed 4096-dim holographic world vector.
+4000,FP16 KV cache,2.62144,2621.44,100.0,Uncompressed transformer KV cache.
+4000,TurboQuant,0.57344,573.44,21.875,TurboQuant reports KV quality neutrality at 3.5 bits/channel.
+4000,KIVI 2-bit,0.32768,327.68,12.5,Raw 2-bit KV model versus FP16 cache.
+4000,PyramidKV,0.3145728,314.5728,12.0,Paper reports full-cache performance with 12% KV retention.
+4000,Catalyst Brain HKVC,1.6384e-05,0.016384,0.000625,Fixed 4096-dim holographic world vector.
+16000,FP16 KV cache,10.48576,10485.76,100.0,Uncompressed transformer KV cache.
+16000,TurboQuant,2.29376,2293.76,21.875,TurboQuant reports KV quality neutrality at 3.5 bits/channel.
+16000,KIVI 2-bit,1.31072,1310.72,12.5,Raw 2-bit KV model versus FP16 cache.
+16000,PyramidKV,1.2582912,1258.2912,12.0,Paper reports full-cache performance with 12% KV retention.
+16000,Catalyst Brain HKVC,1.6384e-05,0.016384,0.00015625,Fixed 4096-dim holographic world vector.
+64000,FP16 KV cache,41.94304,41943.04,100.0,Uncompressed transformer KV cache.
+64000,TurboQuant,9.17504,9175.04,21.875,TurboQuant reports KV quality neutrality at 3.5 bits/channel.
+64000,KIVI 2-bit,5.24288,5242.88,12.5,Raw 2-bit KV model versus FP16 cache.
+64000,PyramidKV,5.0331648,5033.1648,12.0,Paper reports full-cache performance with 12% KV retention.
+64000,Catalyst Brain HKVC,1.6384e-05,0.016384,3.9063e-05,Fixed 4096-dim holographic world vector.
+128000,FP16 KV cache,83.88608,83886.08,100.0,Uncompressed transformer KV cache.
+128000,TurboQuant,18.35008,18350.08,21.875,TurboQuant reports KV quality neutrality at 3.5 bits/channel.
+128000,KIVI 2-bit,10.48576,10485.76,12.5,Raw 2-bit KV model versus FP16 cache.
+128000,PyramidKV,10.0663296,10066.3296,12.0,Paper reports full-cache performance with 12% KV retention.
+128000,Catalyst Brain HKVC,1.6384e-05,0.016384,1.9531e-05,Fixed 4096-dim holographic world vector.

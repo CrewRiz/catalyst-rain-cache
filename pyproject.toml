@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catalyst-kv-cache"
+version = "0.1.0"
+description = "Research drop-in Catalyst KV-cache adapter backed by catalyst-brain HDC primitives."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Strategic Innovations AI", email = "hello@strategic-innovations.ai" }]
+dependencies = ["catalyst-brain>=1.3.2,<2"]
+keywords = ["kv-cache", "transformers", "hdc", "catalyst-brain", "long-context"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Intended Audience :: Science/Research",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/CrewRiz/catalyst-rain-cache"
+Issues = "https://github.com/CrewRiz/catalyst-rain-cache/issues"
+Commercial = "https://strategic-innovations.ai"
+
+[project.scripts]
+catalyst-kv-cache = "catalyst_kv_cache.cli:main"
+catalyst-kv-cache-smoke = "catalyst_kv_cache.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
