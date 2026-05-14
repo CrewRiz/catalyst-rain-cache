@@ -35,6 +35,21 @@ DEFAULT_RULER_TASKS = (
     "fwe",
 )
 DEFAULT_RULER_LENGTHS = (4096, 8192)
+DEFAULT_LONGBENCH_TEMPLATE = """Please read the following text and answer the question below.
+
+<text>
+{context}
+</text>
+
+{question}
+
+Choices:
+(A) {choice_A}
+(B) {choice_B}
+(C) {choice_C}
+(D) {choice_D}
+
+Format your response as follows: "The correct answer is (insert answer here)"."""
 
 
 def run_official_longbench_ruler(
@@ -336,7 +351,7 @@ def _run_longbench_v2(
     client: Any,
     max_input_tokens: int,
 ) -> dict[str, Any]:
-    template = (longbench_repo / "prompts" / "0shot.txt").read_text(encoding="utf-8")
+    template = _longbench_template(longbench_repo)
     rows = []
     for item in items:
         prompt = _longbench_prompt(template, item)
@@ -464,6 +479,13 @@ def _load_longbench_items(*, longbench_repo: Path, limit: int) -> list[dict[str,
             if len(selected) >= limit:
                 break
     return selected[:limit]
+
+
+def _longbench_template(longbench_repo: str | Path) -> str:
+    template_path = Path(longbench_repo) / "prompts" / "0shot.txt"
+    if template_path.exists():
+        return template_path.read_text(encoding="utf-8")
+    return DEFAULT_LONGBENCH_TEMPLATE
 
 
 def _prepare_ruler_examples(

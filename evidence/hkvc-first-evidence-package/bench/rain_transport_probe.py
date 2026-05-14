@@ -13,6 +13,7 @@ from bench.official_longbench_ruler import (
     DEFAULT_MODEL,
     _git_revision,
     _load_longbench_items,
+    _longbench_template,
     _longbench_prompt,
     pack_token_context,
 )
@@ -33,7 +34,7 @@ def run_rain_transport_probe(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     chart_path.mkdir(parents=True, exist_ok=True)
 
-    template = (longbench_path / "prompts" / "0shot.txt").read_text(encoding="utf-8")
+    template = _longbench_template(longbench_path)
     items = list(longbench_items) if longbench_items is not None else _load_longbench_items(
         longbench_repo=longbench_path,
         limit=longbench_limit,

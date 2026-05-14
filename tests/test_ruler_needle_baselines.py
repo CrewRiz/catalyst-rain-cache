@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 EVIDENCE_ROOT = Path(__file__).resolve().parents[1] / "evidence" / "hkvc-first-evidence-package"
 if str(EVIDENCE_ROOT) not in sys.path:
@@ -11,9 +13,12 @@ if str(EVIDENCE_ROOT) not in sys.path:
 
 
 def test_sliding_window_has_recent_retrieval_positive_control(tmp_path):
-    from bench.ruler_needle_benchmark import run_ruler_needle_benchmark
+    import bench.ruler_needle_benchmark as ruler_needle_benchmark
 
-    payload = run_ruler_needle_benchmark(
+    if ruler_needle_benchmark.CatalystLongContextSecretMemory is None:
+        pytest.skip("installed catalyst-brain build does not expose the long-context secret-memory runner")
+
+    payload = ruler_needle_benchmark.run_ruler_needle_benchmark(
         output=tmp_path / "ruler.json",
         chart_dir=tmp_path / "charts",
         trials=2,

@@ -16,7 +16,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from catalyst_brain import CatalystLongContextSecretMemory  # noqa: E402
+try:  # noqa: E402
+    from catalyst_brain import CatalystLongContextSecretMemory
+except ImportError:  # pragma: no cover - depends on installed catalyst-brain build
+    CatalystLongContextSecretMemory = None  # type: ignore[assignment]
 
 
 LOGICAL_CONTEXT_TOKENS = 1_000_000
@@ -81,6 +84,7 @@ def run_ruler_needle_benchmark(
     trials: int = 32,
     distractors: int = 2048,
 ) -> dict[str, Any]:
+    _require_secret_memory()
     scenarios = [
         _single_needle(trials=trials, distractors=distractors),
         _multi_needle(trials=trials, distractors=distractors),
@@ -339,6 +343,13 @@ def _run_retrieval_scenario(
         "standard_kv_bytes": _standard_kv_bytes(LOGICAL_CONTEXT_TOKENS),
         "throughput_queries_per_second": round(total / max(catalyst_timing["median_us"] / 1_000_000.0, 1e-12), 4),
     }
+
+
+def _require_secret_memory() -> None:
+    if CatalystLongContextSecretMemory is None:
+        raise RuntimeError(
+            "This benchmark requires a catalyst-brain build that exposes the long-context secret-memory runner."
+        )
 
 
 def _build_memories(needles: list[Needle], distractors: int) -> tuple[CatalystLongContextSecretMemory, SlidingWindowBaseline, LinearScanBaseline]:
