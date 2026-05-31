@@ -69,26 +69,38 @@
   "cloudflare_workers_ai": {
     "account_id_present": true,
     "api_token_present": false,
+    "auth_source": "wrangler_oauth",
     "docs_url": "https://developers.cloudflare.com/workers-ai/models/",
     "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
     "provider": "Cloudflare Workers AI",
     "quality_probe": {
-      "latency_ms": null,
-      "prompt_count": 0,
-      "ran": false,
-      "score": null
+      "latency_ms": 468.0605,
+      "prompt_count": 1,
+      "ran": true,
+      "rows": [
+        {
+          "correct": true,
+          "expected": "ALPHA-17",
+          "id": "northstar_code",
+          "response": "ALPHA-17"
+        }
+      ],
+      "score": 1.0
     },
     "setup": {
       "default_model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
       "optional_env": [
-        "CATALYST_CF_WORKERS_AI_MODEL"
+        "CATALYST_CF_WORKERS_AI_MODEL",
+        "CATALYST_WRANGLER_CONFIG_PATH"
       ],
       "required_env": [
         "CLOUDFLARE_ACCOUNT_ID",
-        "CLOUDFLARE_API_TOKEN"
+        "CLOUDFLARE_API_TOKEN or CATALYST_USE_WRANGLER_OAUTH=1"
       ]
     },
-    "status": "skipped_missing_credentials"
+    "status": "measured",
+    "wrangler_oauth_enabled": true,
+    "wrangler_oauth_present": true
   },
   "official_benchmark_readiness": {
     "aggregate": {
@@ -119,31 +131,31 @@
   },
   "public_adapter_latency": {
     "aggregate": {
-      "passthrough_update_p50_us": 314.271,
-      "passthrough_update_p95_us": 477.625,
+      "passthrough_update_p50_us": 147.2495,
+      "passthrough_update_p95_us": 307.5,
       "refs_compact_saved_pct": 0.0,
-      "refs_total_compact_bytes": 161666,
-      "refs_update_p50_us": 297.1875,
-      "refs_update_p95_us": 468.084,
+      "refs_total_compact_bytes": 161682,
+      "refs_update_p50_us": 124.4165,
+      "refs_update_p95_us": 140.083,
       "updates": 512
     },
     "rows": [
       {
         "compression_report": {
           "commercial_contact": "hello@strategic-innovations.ai",
-          "compact_record_bytes": 161162,
+          "compact_record_bytes": 161166,
           "layers": 4,
           "mode": "passthrough",
           "original_bytes_estimate": 120072,
-          "rain_header_bytes": 524,
+          "rain_header_bytes": 520,
           "records": 512,
           "saved_pct": 0.0,
           "total_compact_bytes": 161686
         },
-        "mean_us": 331.9849,
+        "mean_us": 180.2928,
         "mode": "passthrough",
-        "p50_us": 314.271,
-        "p95_us": 477.625,
+        "p50_us": 147.2495,
+        "p95_us": 307.5,
         "returned_passthrough": 512,
         "returned_refs": 0,
         "updates": 512
@@ -151,19 +163,19 @@
       {
         "compression_report": {
           "commercial_contact": "hello@strategic-innovations.ai",
-          "compact_record_bytes": 161150,
+          "compact_record_bytes": 161166,
           "layers": 4,
           "mode": "refs",
           "original_bytes_estimate": 120072,
           "rain_header_bytes": 516,
           "records": 512,
           "saved_pct": 0.0,
-          "total_compact_bytes": 161666
+          "total_compact_bytes": 161682
         },
-        "mean_us": 325.4894,
+        "mean_us": 127.2045,
         "mode": "refs",
-        "p50_us": 297.1875,
-        "p95_us": 468.084,
+        "p50_us": 124.4165,
+        "p95_us": 140.083,
         "returned_passthrough": 0,
         "returned_refs": 512,
         "updates": 512
@@ -174,7 +186,6 @@
     "Official LongBench/RULER scores still require running official task repos with pinned dataset revisions.",
     "KIVI, TurboQuant, PyramidKV/H2O, vLLM/PagedAttention, and sparse/retrieval baselines still need imported implementation runs on the same hardware.",
     "Public adapter timings measure wrapper overhead, not production catalyst-brain SDK kernel throughput.",
-    "Cloudflare Workers AI stronger-model probe requires CLOUDFLARE_API_TOKEN before it can run.",
     "No official benchmark score is claimed in this artifact.",
     "No modern baseline implementation has been measured on the same machine yet."
   ],

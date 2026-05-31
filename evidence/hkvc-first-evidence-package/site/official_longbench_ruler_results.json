@@ -8,6 +8,7 @@
     "cloudflare_workers_ai_model_path": true,
     "not_catalyst_adapter_quality_until_live_catalyst_model_path": true,
     "official_data_and_scoring_used": true,
+    "packed_token_transport_is_not_model_context_extension": false,
     "private_algorithms_remain_in": "catalyst_brain",
     "ruler_answer_only_prompt_wrapper": true,
     "subset_not_full_official_submission": true
@@ -27,7 +28,7 @@
       "hard_accuracy_pct": 38.89,
       "long_accuracy_pct": 27.27,
       "mean_input_tokens": 12000.0,
-      "mean_latency_ms": 5760.687,
+      "mean_latency_ms": 5416.2417,
       "medium_accuracy_pct": 46.15,
       "sample_count": 36,
       "short_accuracy_pct": 33.33,
@@ -43,7 +44,7 @@
         "id": "66fa50acbb02136c067c6827",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4874.7808,
+        "latency_ms": 4418.9766,
         "length": "short",
         "prediction": "B",
         "prompt_sha256": "785a40068014dc1276942508db430c300421e2cc8d8d0f1df0080b0a739bc702",
@@ -58,11 +59,11 @@
         "id": "66f9625fbb02136c067c5456",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 9641.7408,
+        "latency_ms": 8342.583,
         "length": "short",
         "prediction": "C",
         "prompt_sha256": "859199c1e82733e6e98b23c231aba9fcf1a3bf467a4aa93c9b27d2c482bfd062",
-        "response": "The correct answer is (C) is not the next step after audio cutting if the original audio has low clarity. According to the text, if the original audio is not clean enough, you can skip this step, but if it's not, you should proceed with audio noise reduction after cutting. Therefore, the correct next step would be audio noise reduction, which is not among the provided choices. However, based on the given options and the context of audio processing, the closest correct step after audio cutting, c",
+        "response": "The correct answer is (C) is not the next step after audio cutting if the original audio has low clarity, according to the text, after completing the audio cutting, if the original audio is not clear enough, the next step would be audio noise reduction. However, the correct next step after audio cutting is actually (A) Begin audio marking if the audio is clear enough, or audio noise reduction if it's not, and then marking. But since the question specifically mentions low clarity, the next step w",
         "sub_domain": "User guide QA",
         "truncated": true
       },
@@ -73,7 +74,7 @@
         "id": "66ed2c87821e116aacb1f149",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4492.2042,
+        "latency_ms": 5159.065,
         "length": "short",
         "prediction": "D",
         "prompt_sha256": "6edbd67c7eb26a7d4d286a2c4f7775791dce468db088d4237ae4491b24788234",
@@ -88,11 +89,11 @@
         "id": "671b1335bb02136c067d4e88",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 10446.6609,
+        "latency_ms": 7409.3746,
         "length": "short",
         "prediction": null,
         "prompt_sha256": "f1d5e9562574ce0880dbba79745cb7a25fb8ee6602ed32cdb3015edde69a937c",
-        "response": "To determine which player won the most times in the game, we need to examine the records of wins for each player mentioned in the choices. However, the provided text does not directly state the win counts for each player in a straightforward manner. Instead, it details the game results and player choices round by round. \n\nGiven the structure of the data, we would typically look for the \"Congratulation you won\" messages in the prompt sections for each player to count their wins. However, without ",
+        "response": "To determine which player won the most times in the game, let's analyze the provided data for each player mentioned in the choices:\n\n- **Player_0 (not mentioned in choices but useful for context)**: Won rounds 7, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20. Total wins = 11\n- **Player_1 (not mentioned in choices but useful for context)**: Won rounds 5, 6, 7, 11, 12, 13, 14, 15, 16,",
         "sub_domain": "Agent history QA",
         "truncated": true
       },
@@ -103,7 +104,7 @@
         "id": "66fcf2f2bb02136c067c9169",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 6357.6535,
+        "latency_ms": 5939.6602,
         "length": "short",
         "prediction": "B",
         "prompt_sha256": "3dade00d2bd78ef0c6aedeb5aacda23a4471567636ab6b01822eb391861eb80e",
@@ -118,11 +119,11 @@
         "id": "66f36490821e116aacb2cc22",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 7490.942,
+        "latency_ms": 7799.419,
         "length": "short",
         "prediction": "B",
         "prompt_sha256": "a2243d112791609fb7fac90643ca0c1249ff541af2663041e13977ff256c987c",
-        "response": "The correct answer is (B) Establish new types of courts, such as intellectual property courts, financial courts, and Internet courts, and accelerate the construction of intelligent courts, but more accurately according to the text, it is through enhancing the formulation of top-level informatization planning and standards, strengthening the construction of informatization infrastructure and security system, fully promoting electronic litigation, developing and applying intelligent assistant syst",
+        "response": "The correct answer is (B) Establish new types of courts, such as intellectual property courts, financial courts, and Internet courts, and accelerate the construction of intelligent courts, but more accurately, according to the text, it is through enhancing the formulation of top-level informatization planning and standards, strengthening the construction of informatization infrastructure and security system, fully promoting electronic litigation, developing and applying intelligent assistant sys",
         "sub_domain": "Financial",
         "truncated": true
       },
@@ -133,7 +134,7 @@
         "id": "66fcfb5fbb02136c067c93ae",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4240.2683,
+        "latency_ms": 4709.1052,
         "length": "short",
         "prediction": "A",
         "prompt_sha256": "ee440f636bbaed3494b49372255cfb02d42e15870856836622bb35df20192a94",
@@ -148,11 +149,11 @@
         "id": "66f53f2b821e116aacb3335a",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4594.2674,
+        "latency_ms": 6818.5457,
         "length": "short",
         "prediction": "C",
         "prompt_sha256": "8922f5463fcc2f61cdae0eec72062c0d7153bb043fb5bc4805fdb385c69fd19f",
-        "response": "The correct answer is (C).",
+        "response": "The correct answer is (C) When the angle of a face relative to the print bed exceeds 45 degrees is not mentioned, but it is necessary to define support surface geometries to support that face, and you can change the color of the support surfaces, and also other options like layer height, and minimum edge length.",
         "sub_domain": "User guide QA",
         "truncated": true
       },
@@ -163,7 +164,7 @@
         "id": "6703a0ecbb02136c067cd11b",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4675.2504,
+        "latency_ms": 4658.2276,
         "length": "short",
         "prediction": "A",
         "prompt_sha256": "b3ce1c277841118cf7ec5b61bd85b23629c52b115e3416d368c84636dac54d81",
@@ -178,7 +179,7 @@
         "id": "671b3cabbb02136c067d5252",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 9830.4088,
+        "latency_ms": 7594.625,
         "length": "short",
         "prediction": null,
         "prompt_sha256": "2f698297abaf5ad559d3202da5a3263c878b015bf338fc7c2b1a0107305e6c4d",
@@ -193,7 +194,7 @@
         "id": "66f599ef821e116aacb34099",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4474.2039,
+        "latency_ms": 5290.2452,
         "length": "short",
         "prediction": "D",
         "prompt_sha256": "2f8657f82a805050a145f88b664f5d65fd7fed17b8d14cbd29e0c655dc62729b",
@@ -208,7 +209,7 @@
         "id": "66ebed525a08c7b9b35e1cb4",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 5066.8046,
+        "latency_ms": 4614.0631,
         "length": "short",
         "prediction": "A",
         "prompt_sha256": "e4147fd3e32ad7e431ee9f5fdd65ca935082fceebbead4955709de0737f18922",
@@ -223,7 +224,7 @@
         "id": "66fa542bbb02136c067c686d",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4370.922,
+        "latency_ms": 4646.3268,
         "length": "medium",
         "prediction": "B",
         "prompt_sha256": "5c600488f92b1a049f9328bf59ff396ffb5c3d84865aafccb0c268f5eddd92c7",
@@ -238,7 +239,7 @@
         "id": "6725dc28bb02136c067d8555",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 5030.175,
+        "latency_ms": 4142.1135,
         "length": "medium",
         "prediction": "D",
         "prompt_sha256": "8c70deb46e5a2bafe3e3d7c13e626405f4c9514dc889297e3caf0e81e5f85bcb",
@@ -253,11 +254,11 @@
         "id": "67285e1dbb02136c067d901b",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 6854.1625,
+        "latency_ms": 6085.7302,
         "length": "medium",
         "prediction": "B",
         "prompt_sha256": "b64a3b809a135b104148d6cff1110ae377d0591cab93457c0af53ac13c2f4e8e",
-        "response": "The provided text does not contain information about the specific news programs mentioned in the question (Q1130799, Q49106, Q78994, Q825946) or their respective number of seasons. Therefore, it is not possible to determine the correct answer based on the given text.\n\nThe correct answer is (B) Q49106",
+        "response": "The provided text does not contain information about the specific news programs mentioned in the question (Q1130799, Q49106, Q78994, Q825946) or their respective number of seasons. Therefore, it is not possible to determine the correct answer based on the given text.\n\nThe correct answer is (B).",
         "sub_domain": "Knowledge graph reasoning",
         "truncated": true
       },
@@ -268,7 +269,7 @@
         "id": "671b530dbb02136c067d5454",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 5240.8003,
+        "latency_ms": 4788.5653,
         "length": "medium",
         "prediction": "A",
         "prompt_sha256": "910ce2b3754f6aeca9de4d35233fe4d0d83b13f3d2fbb253770ae9957f61a2c6",
@@ -283,7 +284,7 @@
         "id": "66ec0c4c821e116aacb1994a",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4602.3467,
+        "latency_ms": 4459.8048,
         "length": "medium",
         "prediction": "C",
         "prompt_sha256": "92178def9177e4e0408f21839f2bc5817e25acc2efc2168e5d7c52aa2f592ca7",
@@ -298,7 +299,7 @@
         "id": "6723a1ccbb02136c067d70b3",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4931.614,
+        "latency_ms": 4624.3736,
         "length": "medium",
         "prediction": "D",
         "prompt_sha256": "14b50ee2c656278b85474b7af505fa97cefafec67d878566b59c7335fc40bfe8",
@@ -313,7 +314,7 @@
         "id": "66ebd3ba5a08c7b9b35e0446",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 5870.6592,
+        "latency_ms": 4575.8857,
         "length": "medium",
         "prediction": "A",
         "prompt_sha256": "221fec6d4d18981e8935ec6569cd17dc65ea8742bae94647cd830a46ff8c5577",
@@ -328,7 +329,7 @@
         "id": "66ec3fa7821e116aacb1c75d",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4650.0773,
+        "latency_ms": 4655.427,
         "length": "medium",
         "prediction": "B",
         "prompt_sha256": "ab0c250306f603d28f55aaa52741a06af91475b78c437eec21d9dfe4dd710237",
@@ -343,7 +344,7 @@
         "id": "66f2a414821e116aacb2a3af",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4276.6883,
+        "latency_ms": 4250.2144,
         "length": "medium",
         "prediction": "C",
         "prompt_sha256": "7c9cc83551ce28b621fe749f4f2938b0b94c512fe4c7fdb526773368c1bfdf24",
@@ -358,7 +359,7 @@
         "id": "671b99e5bb02136c067d583d",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 7218.023,
+        "latency_ms": 7293.2511,
         "length": "medium",
         "prediction": null,
         "prompt_sha256": "e9842b3136eaa5c93adc972021ec5605328052d48303710465097dc8b8e26a80",
@@ -373,7 +374,7 @@
         "id": "66ed875e821e116aacb2023e",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 5393.0442,
+        "latency_ms": 5190.9532,
         "length": "medium",
         "prediction": "B",
         "prompt_sha256": "c1399912fbc0aa0154f70c72c2de079e071bdfafd483f040496d405de6b9775c",
@@ -388,7 +389,7 @@
         "id": "670aac92bb02136c067d218a",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 5161.9209,
+        "latency_ms": 4212.4047,
         "length": "medium",
         "prediction": "D",
         "prompt_sha256": "44101dbe8dcdd0445390070fb1641865ba362b20dc144740d2e0812d37e6556c",
@@ -403,7 +404,7 @@
         "id": "66fa208bbb02136c067c5fc1",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4171.5107,
+        "latency_ms": 4370.1598,
         "length": "long",
         "prediction": "B",
         "prompt_sha256": "03706523143fb635a4cbbe7e34a1fc7fe159003cb0d3c42271fe666c7497c12e",
@@ -418,7 +419,7 @@
         "id": "66faafd9bb02136c067c74a8",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 5701.679,
+        "latency_ms": 4110.0588,
         "length": "long",
         "prediction": "A",
         "prompt_sha256": "9129219c0a773c42f1676e9e18c792f88549642efb46f41fc6119b7094953eba",
@@ -433,7 +434,7 @@
         "id": "67237d8ebb02136c067d6c06",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 5553.0542,
+        "latency_ms": 5641.8851,
         "length": "long",
         "prediction": "D",
         "prompt_sha256": "6de2860a30a9ce201cbd235e4b9e931da18275a39f007b4cf92f26c64c10b9da",
@@ -448,11 +449,11 @@
         "id": "66f61d7dbb02136c067c1802",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 10946.5972,
+        "latency_ms": 8313.5929,
         "length": "long",
         "prediction": null,
         "prompt_sha256": "f7828dc22e5394c0bbffb13a2d773c383693a2ff982f6973365ab6c5d7698d53",
-        "response": "To determine the required percentage increase, we first need to establish the EBIT for the first half of 2024 and the EBIT for the second half of 2023, and then calculate the total EBIT needed for 2024 to meet the targets. Finally, we can calculate the required increase for the second half of 2024.\n\nGiven data:\n- EBIT for the first half of 2024 = \u20ac276.2 million\n- Total EBIT for 2023 = \u20ac734.1 million (from the table for Operating segments in total, EBIT)\n  - Since the EBIT for the first half",
+        "response": "To determine the required percentage increase, we first need to establish the EBIT for the first half of 2024 and the full-year EBIT target, as well as the EBIT for the second half of 2023.\n\nFrom the provided text, we find that:\n- The EBIT for the first half of 2024 is \u20ac276.2 million.\n- The EBIT for the first half of 2023 is \u20ac290.9 million.\n\nHowever, the full-year EBIT target for 2024 is not explicitly stated in the provided text. To proceed, we'll need to infer or calculate the required increas",
         "sub_domain": "Financial",
         "truncated": true
       },
@@ -463,11 +464,11 @@
         "id": "66ebd55f5a08c7b9b35e0698",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4381.2803,
+        "latency_ms": 4738.2478,
         "length": "long",
         "prediction": "D",
         "prompt_sha256": "c1c6a3f785a5d7f285d4233a6a0f972ce4b0c819b375bda7a45fc2190da249d7",
-        "response": "The correct answer is (D) Lagoda.",
+        "response": "The correct answer is (D) Lagoda",
         "sub_domain": "Literary",
         "truncated": true
       },
@@ -478,7 +479,7 @@
         "id": "66fa3843bb02136c067c655d",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4762.2763,
+        "latency_ms": 4587.8734,
         "length": "long",
         "prediction": "A",
         "prompt_sha256": "f3683b691c9fbff2cdfd8b352bfa8df61f3fd866a92d5a22580d06cf30030f4e",
@@ -493,7 +494,7 @@
         "id": "66fcffd9bb02136c067c94c5",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 8905.9543,
+        "latency_ms": 8298.4368,
         "length": "long",
         "prediction": null,
         "prompt_sha256": "151f80ff2973614e46788d3cd00ef1371c138c6afddd484d943a41545c9947bf",
@@ -508,7 +509,7 @@
         "id": "66f2a46d821e116aacb2a41a",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4635.6273,
+        "latency_ms": 4398.7882,
         "length": "long",
         "prediction": "B",
         "prompt_sha256": "240cd9f23f884cf2b8548a014c787a2a77eccd0eb0fef5aef901b4f6f2e2ccf5",
@@ -523,7 +524,7 @@
         "id": "66f94f9ebb02136c067c4fde",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 4472.048,
+        "latency_ms": 4842.4836,
         "length": "long",
         "prediction": "B",
         "prompt_sha256": "0424dd8ac93abbb1088521834a107bd49e3ed194c130e9c82ac7797b0cadf88d",
@@ -538,11 +539,11 @@
         "id": "66ee4c55821e116aacb21596",
         "input_tokens": 12000,
         "judge": false,
-        "latency_ms": 6072.2471,
+        "latency_ms": 5739.4487,
         "length": "long",
         "prediction": "C",
         "prompt_sha256": "620bda38a33ab4c8429d3a71393cbb1e506c5e169da10620605d2f42895c9b88",
-        "response": "The correct answer is (C) The speed of Chinese teaching was accelerated, and missionaries did not fully understand Chinese thoughts and classics, but rather the opposite: the Jesuits actually made a concerted effort to understand Chinese thoughts and classics, which contributed to the controversy.",
+        "response": "The correct answer is (C) The speed of Chinese teaching was accelerated, and missionaries did not fully understand Chinese thoughts and classics, but rather the opposite: the Jesuits made a concerted effort to understand Chinese culture and language, which contributed to the controversy.",
         "sub_domain": "Academic",
         "truncated": true
       },
@@ -553,7 +554,7 @@
         "id": "66f920d8bb02136c067c4b81",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 4721.0692,
+        "latency_ms": 4592.7074,
         "length": "medium",
         "prediction": "C",
         "prompt_sha256": "3dbd15604c314533519d30af765f7b38c551ef3f5ea05571b7d612270fc30788",
@@ -568,7 +569,7 @@
         "id": "66ec56dd821e116aacb1cd0e",
         "input_tokens": 12000,
         "judge": true,
-        "latency_ms": 3275.7708,
+        "latency_ms": 3672.0782,
         "length": "long",
         "prediction": "C",
         "prompt_sha256": "bc9c4453dea5c90bb5758d9fb338ec9f7b20894aee26d3fcb0dc69901bced188",
@@ -601,7 +602,7 @@
       {
         "index": 1179,
         "input_tokens": 4093,
-        "latency_ms": 1264.9655,
+        "latency_ms": 1461.7545,
         "outputs": [
           "5437923"
         ],
@@ -615,7 +616,7 @@
       {
         "index": 8824,
         "input_tokens": 4093,
-        "latency_ms": 2148.564,
+        "latency_ms": 1249.0631,
         "outputs": [
           "3094235"
         ],
@@ -629,7 +630,7 @@
       {
         "index": 7189,
         "input_tokens": 4075,
-        "latency_ms": 1240.0888,
+        "latency_ms": 1374.003,
         "outputs": [
           "2976045"
         ],
@@ -643,7 +644,7 @@
       {
         "index": 7372,
         "input_tokens": 4076,
-        "latency_ms": 1202.6505,
+        "latency_ms": 1333.1001,
         "outputs": [
           "1902651"
         ],
@@ -657,7 +658,7 @@
       {
         "index": 2597,
         "input_tokens": 4055,
-        "latency_ms": 2019.6441,
+        "latency_ms": 1589.1088,
         "outputs": [
           "b15da72d-d4ce-427c-8a94-ae9fcc351e4f"
         ],
@@ -671,7 +672,7 @@
       {
         "index": 3737,
         "input_tokens": 4090,
-        "latency_ms": 1667.4009,
+        "latency_ms": 2040.774,
         "outputs": [
           "6de21429-3bf0-49c1-8156-e501b30e96e8"
         ],
@@ -685,7 +686,7 @@
       {
         "index": 0,
         "input_tokens": 4082,
-        "latency_ms": 2456.5749,
+        "latency_ms": 2362.66,
         "outputs": [
           "KDRXW",
           "XUFUS",
@@ -703,7 +704,7 @@
       {
         "index": 1,
         "input_tokens": 4082,
-        "latency_ms": 2662.5954,
+        "latency_ms": 1470.2334,
         "outputs": [
           "FKIMB",
           "VKUYA",
@@ -721,7 +722,7 @@
       {
         "index": 0,
         "input_tokens": 3875,
-        "latency_ms": 2458.565,
+        "latency_ms": 1496.7142,
         "outputs": [
           "broad",
           "erection",
@@ -734,7 +735,7 @@
           "vase",
           "ambulance"
         ],
-        "prediction": "bar verbalize race erection ambulance broad vase reaction rap barrier",
+        "prediction": "bar verbalize reaction ambulance erection broad race vase rap barrier",
         "prompt_mode": "answer_only",
         "prompt_sha256": "cff1a782536b4800b8c90480f566c4282a864a7bb20eba875f25bc63ca20435c",
         "score_pct": 100.0,
@@ -744,7 +745,7 @@
       {
         "index": 1,
         "input_tokens": 4022,
-        "latency_ms": 1806.2586,
+        "latency_ms": 1689.1376,
         "outputs": [
           "alloy",
           "tank",
@@ -767,7 +768,7 @@
       {
         "index": 0,
         "input_tokens": 4030,
-        "latency_ms": 1413.7563,
+        "latency_ms": 1590.6209,
         "outputs": [
           "ufnllw",
           "iwshay",
@@ -783,7 +784,7 @@
       {
         "index": 1,
         "input_tokens": 3747,
-        "latency_ms": 1211.9839,
+        "latency_ms": 1318.063,
         "outputs": [
           "vcctvo",
           "ilbvbw",
@@ -799,7 +800,7 @@
       {
         "index": 17554,
         "input_tokens": 8173,
-        "latency_ms": 2631.5526,
+        "latency_ms": 2734.7741,
         "outputs": [
           "3094235"
         ],
@@ -813,7 +814,7 @@
       {
         "index": 29084,
         "input_tokens": 8182,
-        "latency_ms": 2759.4072,
+        "latency_ms": 2824.8349,
         "outputs": [
           "5918715"
         ],
@@ -827,7 +828,7 @@
       {
         "index": 26022,
         "input_tokens": 7755,
-        "latency_ms": 2480.3573,
+        "latency_ms": 2892.6968,
         "outputs": [
           "3374513"
         ],
@@ -841,7 +842,7 @@
       {
         "index": 23170,
         "input_tokens": 7733,
-        "latency_ms": 2516.3303,
+        "latency_ms": 2439.5785,
         "outputs": [
           "5365936"
         ],
@@ -855,7 +856,7 @@
       {
         "index": 5105,
         "input_tokens": 8100,
-        "latency_ms": 3779.1515,
+        "latency_ms": 3295.7287,
         "outputs": [
           "eedb0ce5-a7fe-4dcd-a528-b516c521ff2e"
         ],
@@ -869,7 +870,7 @@
       {
         "index": 13085,
         "input_tokens": 8165,
-        "latency_ms": 3618.0814,
+        "latency_ms": 3818.3924,
         "outputs": [
           "496cc03a-06fd-41e6-9fd3-3d40bcc4f0db"
         ],
@@ -883,7 +884,7 @@
       {
         "index": 0,
         "input_tokens": 8184,
-        "latency_ms": 3237.3094,
+        "latency_ms": 3041.9673,
         "outputs": [
           "LTVHU",
           "MGLSG",
@@ -901,7 +902,7 @@
       {
         "index": 1,
         "input_tokens": 8186,
-        "latency_ms": 5080.6714,
+        "latency_ms": 2944.2674,
         "outputs": [
           "SVXZN",
           "XPRCL",
@@ -919,7 +920,7 @@
       {
         "index": 0,
         "input_tokens": 8104,
-        "latency_ms": 3475.6353,
+        "latency_ms": 3453.5727,
         "outputs": [
           "gold",
           "audited",
@@ -942,7 +943,7 @@
       {
         "index": 1,
         "input_tokens": 8122,
-        "latency_ms": 3031.7729,
+        "latency_ms": 3129.8301,
         "outputs": [
           "twins",
           "caliber",
@@ -965,7 +966,7 @@
       {
         "index": 0,
         "input_tokens": 7865,
-        "latency_ms": 2942.0151,
+        "latency_ms": 3025.2758,
         "outputs": [
           "nwlwst",
           "rspvov",
@@ -981,7 +982,7 @@
       {
         "index": 1,
         "input_tokens": 7104,
-        "latency_ms": 2589.607,
+        "latency_ms": 3420.904,
         "outputs": [
           "nquuzu",
           "quiivw",
@@ -1001,7 +1002,7 @@
     "task_rows": [
       {
         "mean_input_tokens": 3948.5,
-        "mean_latency_ms": 2132.4118,
+        "mean_latency_ms": 1592.9259,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1010,7 +1011,7 @@
       },
       {
         "mean_input_tokens": 3888.5,
-        "mean_latency_ms": 1312.8701,
+        "mean_latency_ms": 1454.3419,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 66.67,
@@ -1019,7 +1020,7 @@
       },
       {
         "mean_input_tokens": 4075.5,
-        "mean_latency_ms": 1221.3697,
+        "mean_latency_ms": 1353.5516,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1028,7 +1029,7 @@
       },
       {
         "mean_input_tokens": 4072.5,
-        "mean_latency_ms": 1843.5225,
+        "mean_latency_ms": 1814.9414,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1037,7 +1038,7 @@
       },
       {
         "mean_input_tokens": 4093.0,
-        "mean_latency_ms": 1706.7647,
+        "mean_latency_ms": 1355.4088,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1046,7 +1047,7 @@
       },
       {
         "mean_input_tokens": 4082.0,
-        "mean_latency_ms": 2559.5851,
+        "mean_latency_ms": 1916.4467,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1055,7 +1056,7 @@
       },
       {
         "mean_input_tokens": 8113.0,
-        "mean_latency_ms": 3253.7041,
+        "mean_latency_ms": 3291.7014,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1064,7 +1065,7 @@
       },
       {
         "mean_input_tokens": 7484.5,
-        "mean_latency_ms": 2765.8111,
+        "mean_latency_ms": 3223.0899,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1073,7 +1074,7 @@
       },
       {
         "mean_input_tokens": 7744.0,
-        "mean_latency_ms": 2498.3438,
+        "mean_latency_ms": 2666.1377,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1082,7 +1083,7 @@
       },
       {
         "mean_input_tokens": 8132.5,
-        "mean_latency_ms": 3698.6164,
+        "mean_latency_ms": 3557.0606,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1091,7 +1092,7 @@
       },
       {
         "mean_input_tokens": 8177.5,
-        "mean_latency_ms": 2695.4799,
+        "mean_latency_ms": 2779.8045,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1100,7 +1101,7 @@
       },
       {
         "mean_input_tokens": 8185.0,
-        "mean_latency_ms": 4158.9904,
+        "mean_latency_ms": 2993.1173,
         "null_predictions": 0,
         "sample_count": 2,
         "score_pct": 100.0,
@@ -1111,6 +1112,7 @@
   },
   "system_info": {
     "execution_path": "cloudflare_workers_ai",
+    "local_truncation_disabled": false,
     "longbench_limit": 36,
     "longbench_repo": "/Users/ghostmesh/benchmark-runs/industry/LongBench",
     "longbench_revision": "2e00731f8d0bff23dc4325161044d0ed8af94c1e",
@@ -1118,6 +1120,7 @@
     "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
     "platform": "macOS-26.4-arm64-arm-64bit",
     "python": "3.9.6",
+    "rain_context_transport": null,
     "ruler_lengths": [
       4096,
       8192
@@ -1134,7 +1137,7 @@
       "cwe",
       "fwe"
     ],
-    "run_dir": "/Users/ghostmesh/benchmark-runs/catalyst-kv-cache-official",
+    "run_dir": "/Users/ghostmesh/benchmark-runs/catalyst-rain-official",
     "suite": "official_longbench_ruler_subset"
   }
 }

@@ -4,8 +4,7 @@ import argparse
 import json
 import sys
 
-from catalyst_kv_cache import CatalystKVCache, CatalystKVConfig
-from catalyst_kv_cache.sdk_bridge import onboarding_payload, sdk_status
+from catalyst_kv_cache.sdk_bridge import demo_payload, onboarding_payload, sdk_status
 from catalyst_kv_cache.serve import CatalystServeConfig, readiness_payload, serve_forever
 
 
@@ -21,6 +20,8 @@ def main(argv: list[str] | None = None) -> int:
         return _doctor(rest)
     if command == "onboard":
         return _onboard(rest)
+    if command == "demo":
+        return _demo(rest)
     if command == "serve":
         return _serve(rest)
     parser = _base_parser()
@@ -30,11 +31,13 @@ def main(argv: list[str] | None = None) -> int:
 
 def _base_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Catalyst KV Cache adapter CLI.")
-    parser.add_argument("command", nargs="?", choices=("smoke", "doctor", "onboard", "serve"))
+    parser.add_argument("command", nargs="?", choices=("smoke", "doctor", "onboard", "demo", "serve"))
     return parser
 
 
 def _smoke(argv: list[str] | None = None) -> int:
+    from catalyst_kv_cache import CatalystKVCache, CatalystKVConfig
+
     parser = argparse.ArgumentParser(description="Run a Catalyst KV Cache smoke test.")
     parser.add_argument("--mode", choices=("passthrough", "refs"), default="passthrough")
     args = parser.parse_args(argv)
@@ -84,6 +87,27 @@ def _onboard(argv: list[str] | None = None) -> int:
         print("Commands:")
         for command in payload["commands"]:
             print(f"  {command}")
+    return 0
+
+
+def _demo(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Summarize publishable Catalyst RAIN cache demo evidence.")
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args(argv)
+    payload = demo_payload()
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        official = payload["official_subset"]
+        longbench = official["longbench_v2"]
+        ruler = official["ruler"]
+        probe = payload["live_model_probe"]
+        print("Catalyst RAIN cache demo")
+        print(f"  Verdict: {payload['headline']['verdict']}")
+        print(f"  LongBench v2 subset: {longbench['accuracy_pct']}% over {longbench['sample_count']} examples")
+        print(f"  RULER subset: {ruler['mean_score_pct']}% over {ruler['prediction_count']} predictions")
+        print(f"  Live model probe: {probe['status']} via {probe['auth_source']}")
+        print("  Boundary: public adapter only; private algorithms live in catalyst-brain")
     return 0
 
 

@@ -47,6 +47,52 @@ def test_cloudflare_response_text_accepts_numeric_responses():
     assert _cloudflare_response_text({"result": {"response": 5437923}}) == "5437923"
 
 
+def test_cloudflare_client_can_use_opt_in_wrangler_oauth(monkeypatch, tmp_path):
+    from bench.official_longbench_ruler import CloudflareWorkersAIClient
+
+    wrangler_config = tmp_path / "default.toml"
+    wrangler_config.write_text(
+        'oauth_token = "local-oauth-token"\n'
+        'refresh_token = "do-not-use-this"\n',
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "account-123")
+    monkeypatch.delenv("CLOUDFLARE_API_TOKEN", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_AUTH_TOKEN", raising=False)
+    monkeypatch.setenv("CATALYST_USE_WRANGLER_OAUTH", "1")
+    monkeypatch.setenv("CATALYST_WRANGLER_CONFIG_PATH", str(wrangler_config))
+
+    client = CloudflareWorkersAIClient(model="@cf/test/model", network=False)
+
+    assert client.api_token == "local-oauth-token"
+    assert client.auth_source == "wrangler_oauth"
+
+
+def test_next_evidence_reports_wrangler_oauth_auth_source(monkeypatch, tmp_path):
+    from bench.next_evidence import run_next_evidence
+
+    wrangler_config = tmp_path / "default.toml"
+    wrangler_config.write_text('oauth_token = "local-oauth-token"\n', encoding="utf-8")
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "account-123")
+    monkeypatch.delenv("CLOUDFLARE_API_TOKEN", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_AUTH_TOKEN", raising=False)
+    monkeypatch.setenv("CATALYST_USE_WRANGLER_OAUTH", "1")
+    monkeypatch.setenv("CATALYST_WRANGLER_CONFIG_PATH", str(wrangler_config))
+
+    payload = run_next_evidence(
+        output=tmp_path / "next.json",
+        chart_dir=tmp_path / "charts",
+        updates=4,
+        network=False,
+    )
+
+    cloudflare = payload["cloudflare_workers_ai"]
+    assert cloudflare["api_token_present"] is False
+    assert cloudflare["wrangler_oauth_present"] is True
+    assert cloudflare["auth_source"] == "wrangler_oauth"
+    assert "local-oauth-token" not in json.dumps(cloudflare)
+
+
 def test_ruler_answer_only_prompt_appends_official_answer_prefix():
     from bench.official_longbench_ruler import build_ruler_prompt
 
@@ -193,6 +239,39 @@ def test_rain_worker_execution_path_preserves_context_transport():
     )
 
     assert client.context_transport == "packed_tokens"
+
+
+def test_ruler_prepare_supplies_python_command_shim(monkeypatch, tmp_path):
+    from bench.official_longbench_ruler import _run_ruler_prepare
+
+    empty_path = tmp_path / "empty-path"
+    empty_path.mkdir()
+    monkeypatch.setenv("PATH", str(empty_path))
+    prepare_path = tmp_path / "RULER" / "scripts" / "data" / "prepare.py"
+    prepare_path.parent.mkdir(parents=True)
+    prepare_path.write_text(
+        "import argparse, json, pathlib, subprocess\n"
+        "subprocess.check_call(['python', '-c', 'print(\"shim-ok\")'])\n"
+        "parser = argparse.ArgumentParser()\n"
+        "parser.add_argument('--save_dir')\n"
+        "parser.add_argument('--task')\n"
+        "parser.add_argument('--num_samples')\n"
+        "args, _ = parser.parse_known_args()\n"
+        "out = pathlib.Path(args.save_dir) / args.task / 'validation.jsonl'\n"
+        "out.parent.mkdir(parents=True, exist_ok=True)\n"
+        "out.write_text(json.dumps({'index': 0, 'input': 'x', 'outputs': ['x']}) + '\\n')\n",
+        encoding="utf-8",
+    )
+
+    _run_ruler_prepare(
+        ruler_repo=tmp_path / "RULER",
+        save_dir=tmp_path / "run",
+        task="niah_single_1",
+        max_seq_length=4096,
+        samples=1,
+    )
+
+    assert (tmp_path / "run" / "niah_single_1" / "validation.jsonl").exists()
 
 
 def test_zero_max_input_tokens_preserves_full_prompt_for_rain_transport(tmp_path):

@@ -19,6 +19,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from catalyst_kv_cache import CatalystKVCache, CatalystKVConfig  # noqa: E402
+from bench.official_longbench_ruler import cloudflare_auth_public_status, cloudflare_auth_token  # noqa: E402
 
 
 OFFICIAL_BENCHMARKS = [
@@ -214,7 +215,8 @@ def _baseline_import_readiness() -> dict[str, Any]:
 
 def _cloudflare_workers_ai_probe(*, network: bool) -> dict[str, Any]:
     account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
-    api_token = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+    api_token, auth_source = cloudflare_auth_token()
+    auth_status = cloudflare_auth_public_status()
     model = os.environ.get("CATALYST_CF_WORKERS_AI_MODEL", CF_DEFAULT_MODEL)
     configured = bool(network and account_id and api_token)
     status = "configured" if configured else "skipped_missing_credentials"
@@ -225,7 +227,10 @@ def _cloudflare_workers_ai_probe(*, network: bool) -> dict[str, Any]:
         "docs_url": CF_WORKERS_AI_DOCS,
         "model": model,
         "account_id_present": bool(account_id),
-        "api_token_present": bool(api_token),
+        "api_token_present": auth_status["api_token_present"],
+        "wrangler_oauth_enabled": auth_status["wrangler_oauth_enabled"],
+        "wrangler_oauth_present": auth_status["wrangler_oauth_present"],
+        "auth_source": auth_source,
         "status": status,
         "quality_probe": {
             "ran": False,
@@ -234,8 +239,8 @@ def _cloudflare_workers_ai_probe(*, network: bool) -> dict[str, Any]:
             "prompt_count": 0,
         },
         "setup": {
-            "required_env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
-            "optional_env": ["CATALYST_CF_WORKERS_AI_MODEL"],
+            "required_env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN or CATALYST_USE_WRANGLER_OAUTH=1"],
+            "optional_env": ["CATALYST_CF_WORKERS_AI_MODEL", "CATALYST_WRANGLER_CONFIG_PATH"],
             "default_model": CF_DEFAULT_MODEL,
         },
     }
@@ -396,12 +401,14 @@ def _write_charts(payload: dict[str, Any], chart_dir: Path) -> None:
     )
     cf_value = 1.0 if cloudflare["status"] == "measured" else 0.0
     token_value = 1.0 if cloudflare["api_token_present"] else 0.0
+    auth_value = 1.0 if cloudflare.get("auth_source") else 0.0
     (chart_dir / "next_cloudflare_ai.svg").write_text(
         _bar_chart(
             "Cloudflare Workers AI Probe",
             [
                 ("Account", 1.0 if cloudflare["account_id_present"] else 0.0, "#0f766e"),
-                ("Token", token_value, "#2563eb"),
+                ("API token", token_value, "#2563eb"),
+                ("Any auth", auth_value, "#7c3aed"),
                 ("Measured", cf_value, "#b45309"),
             ],
             max_value=1.0,

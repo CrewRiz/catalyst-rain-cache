@@ -124,6 +124,7 @@ After install, run the onboarding checks:
 ```bash
 catalyst-kv-cache doctor
 catalyst-kv-cache onboard
+catalyst-kv-cache demo
 catalyst-kv-cache smoke --mode passthrough
 catalyst-kv-cache serve --dry-run --json
 ```
@@ -169,6 +170,20 @@ the model an input it can actually process.
 The checked-in transport probe over the official LongBench v2 subset reports
 packed Worker JSON at `35.59%` of raw Cloudflare chat JSON on average, with
 local truncation disabled. Treat that as payload evidence, not quality evidence.
+
+## Demo Evidence
+
+For demos, use:
+
+```bash
+catalyst-kv-cache demo
+```
+
+The demo command summarizes the checked-in evidence artifacts, live-model probe
+status, official subset scores, transport evidence, and claim boundaries. The
+current official subset was refreshed through Cloudflare Workers AI using local
+Wrangler OAuth, so no Cloudflare credential is stored in the repo. See
+[docs/DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) for the repeatable commands.
 
 ## Quick Drop-In Sketch
 

@@ -178,7 +178,7 @@ class CloudflareWorkersAIClient:
         self.model = model
         self.network = network
         self.account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
-        self.api_token = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+        self.api_token, self.auth_source = cloudflare_auth_token()
 
     def generate(self, prompt: str, *, max_tokens: int) -> dict[str, Any]:
         if not self.network:
@@ -217,6 +217,49 @@ class CloudflareWorkersAIClient:
                 last_error = exc
                 time.sleep(2.0 * (attempt + 1))
         raise RuntimeError(f"Cloudflare Workers AI request failed after retries: {last_error!r}")
+
+
+def cloudflare_auth_token() -> tuple[str | None, str | None]:
+    explicit = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+    if explicit:
+        return explicit, "api_token"
+    wrangler = _wrangler_oauth_token()
+    if wrangler:
+        return wrangler, "wrangler_oauth"
+    return None, None
+
+
+def cloudflare_auth_public_status() -> dict[str, Any]:
+    explicit = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+    wrangler = _wrangler_oauth_token()
+    token, source = cloudflare_auth_token()
+    return {
+        "api_token_present": bool(explicit),
+        "wrangler_oauth_enabled": _env_truthy("CATALYST_USE_WRANGLER_OAUTH"),
+        "wrangler_oauth_present": bool(wrangler),
+        "auth_source": source,
+        "auth_present": bool(token),
+    }
+
+
+def _wrangler_oauth_token() -> str | None:
+    if not _env_truthy("CATALYST_USE_WRANGLER_OAUTH"):
+        return None
+    configured = os.environ.get("CATALYST_WRANGLER_CONFIG_PATH")
+    config_path = Path(configured).expanduser() if configured else Path.home() / ".wrangler" / "config" / "default.toml"
+    try:
+        text = config_path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    match = re.search(r'^\s*oauth_token\s*=\s*([\'"])(.*?)\1\s*$', text, flags=re.MULTILINE)
+    if not match:
+        return None
+    token = match.group(2).strip()
+    return token or None
+
+
+def _env_truthy(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
 
 
 class CatalystRAINWorkerClient:
@@ -531,6 +574,8 @@ def _prepare_ruler_examples(
 def _run_ruler_prepare(*, ruler_repo: Path, save_dir: Path, task: str, max_seq_length: int, samples: int) -> None:
     env = os.environ.copy()
     env["PYTHONPATH"] = f"{ruler_repo / 'scripts' / 'data'}{os.pathsep}{env.get('PYTHONPATH', '')}"
+    python_shim_dir = _python_command_shim_dir(save_dir)
+    env["PATH"] = f"{python_shim_dir}{os.pathsep}{env.get('PATH', '')}"
     command = [
         sys.executable,
         str(ruler_repo / "scripts" / "data" / "prepare.py"),
@@ -562,6 +607,21 @@ def _run_ruler_prepare(*, ruler_repo: Path, save_dir: Path, task: str, max_seq_l
     data_path = save_dir / task / "validation.jsonl"
     if result.returncode != 0 or not data_path.exists():
         raise RuntimeError(f"RULER prepare failed for {task}@{max_seq_length}: {result.stderr or result.stdout}")
+
+
+def _python_command_shim_dir(root: Path) -> Path:
+    shim_dir = root / ".ruler-python-shim"
+    shim_dir.mkdir(parents=True, exist_ok=True)
+    shim = shim_dir / "python"
+    if shim.exists():
+        return shim_dir
+    try:
+        shim.symlink_to(sys.executable)
+    except OSError:
+        executable = sys.executable.replace('"', '\\"')
+        shim.write_text(f'#!/bin/sh\nexec "{executable}" "$@"\n', encoding="utf-8")
+        shim.chmod(0o700)
+    return shim_dir
 
 
 def _longbench_group_order(rows: Sequence[dict[str, Any]]) -> list[tuple[str, str, str]]:
