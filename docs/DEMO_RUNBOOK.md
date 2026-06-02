@@ -68,3 +68,17 @@ path.
    are the current evidence-backed wedge; universal replacement is tracked via
    the exact-state SDK path, not by claiming fixed-size semantic compression is
    magically lossless.
+
+## Do Not Claim
+
+Keep these boundaries explicit in demos, decks, and README edits:
+
+- compact semantic state is not lossless full-KV equivalence
+- universal drop-in replacement still requires exact-state transport, API
+  hydration, or an attention replacement path
+- official subset is not a solved production LongBench/RULER score
+- Cloudflare smoke probe is not official benchmark or generation-quality evidence
+- scaled lossless operator profiles are not full model generation-quality
+  evidence
+- Python prototype timing is not production kernel throughput
+- chunked archives are not the hot O(1) decode path

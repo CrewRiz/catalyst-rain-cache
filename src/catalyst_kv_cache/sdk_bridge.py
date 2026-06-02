@@ -160,6 +160,7 @@ def demo_payload(*, evidence_root: str | Path | None = None) -> dict[str, Any]:
             "longbench_cloudflare_not_catalyst_adapter_quality": True,
             "private_algorithms_remain_in": "catalyst_brain",
         },
+        "do_not_claim_yet": list(breakthrough.get("do_not_claim_yet", [])) if breakthrough else [],
         "remaining_blockers": sorted(set(str(item) for item in blockers)),
         "commands": [
             "catalyst-kv-cache demo --json",

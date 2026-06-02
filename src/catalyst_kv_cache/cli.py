@@ -108,6 +108,7 @@ def _demo(argv: list[str] | None = None) -> int:
         print(f"  RULER subset: {ruler['mean_score_pct']}% over {ruler['prediction_count']} predictions")
         print(f"  Live model probe: {probe['status']} via {probe['auth_source']}")
         print("  Boundary: public adapter only; private algorithms live in catalyst-brain")
+        print("  Claim guardrails: run catalyst-kv-cache demo --json")
     return 0
 
 

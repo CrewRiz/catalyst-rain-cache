@@ -144,3 +144,13 @@ def test_public_repo_does_not_expose_legacy_private_transport_surface():
                 leaks.append(str(public_file.relative_to(REPO_ROOT)))
 
     assert sorted(set(leaks)) == []
+
+
+def test_demo_runbook_names_overclaim_boundaries():
+    text = (REPO_ROOT / "docs" / "DEMO_RUNBOOK.md").read_text()
+
+    assert "compact semantic state is not lossless full-KV equivalence" in text
+    assert "official subset is not a solved production LongBench/RULER score" in text
+    assert "Cloudflare smoke probe is not official benchmark or generation-quality evidence" in text
+    assert "Python prototype timing is not production kernel throughput" in text
+    assert "chunked archives are not the hot O(1) decode path" in text

@@ -47,6 +47,34 @@ def test_demo_json_summarizes_publishable_evidence(capsys):
     assert "catalyst-kv-cache demo --json" in payload["commands"]
 
 
+def test_demo_json_surfaces_claim_guardrails(capsys):
+    from catalyst_kv_cache.cli import main
+
+    assert main(["demo", "--json"]) == 0
+
+    payload = json.loads(capsys.readouterr().out)
+    guardrails = payload["do_not_claim_yet"]
+
+    assert len(guardrails) >= 7
+    assert any("compact semantic state" in claim and "full KV tensors" in claim for claim in guardrails)
+    assert any("without exact-state transport" in claim for claim in guardrails)
+    assert any("Official LongBench/RULER production scores" in claim for claim in guardrails)
+    assert any("Chunked archives" in claim and "hot O(1) decode" in claim for claim in guardrails)
+    assert any("operator profiles" in claim and "full model generation-quality" in claim for claim in guardrails)
+    assert any("Cloudflare Workers AI smoke probe" in claim for claim in guardrails)
+    assert any("Python prototype latency" in claim and "production kernel throughput" in claim for claim in guardrails)
+
+
+def test_demo_human_output_mentions_guardrails(capsys):
+    from catalyst_kv_cache.cli import main
+
+    assert main(["demo"]) == 0
+
+    output = capsys.readouterr().out
+    assert "Claim guardrails:" in output
+    assert "demo --json" in output
+
+
 def test_demo_payload_does_not_import_sdk(monkeypatch):
     import catalyst_kv_cache.sdk_bridge as sdk_bridge
 
